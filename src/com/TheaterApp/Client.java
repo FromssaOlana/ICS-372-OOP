@@ -58,6 +58,9 @@ public class Client implements Serializable {
     public boolean equals(String id) {
         return this.id.equals(id);
     }
+    public String toString(){
+        return "\nName: "+ this.name + "\nAddress: " + this.address+ "\nClient ID: "+ this.id+"\n";
+    }
 
 
 }

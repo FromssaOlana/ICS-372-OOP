@@ -126,7 +126,7 @@ public class Wallet implements Serializable {
      * String form of the collection
      */
     public String toString() {
-        return wallet.toString();
+        return creditWallet.toString();
     }
 }
 

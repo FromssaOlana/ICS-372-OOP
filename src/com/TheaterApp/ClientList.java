@@ -129,7 +129,7 @@ public class ClientList implements Serializable {
      * String form of the collection
      */
     public String toString() {
-        return clientList.toString();
+        return clientLinkedList.toString();
     }
 }
 

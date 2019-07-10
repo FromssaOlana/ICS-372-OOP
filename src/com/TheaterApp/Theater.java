@@ -1,6 +1,7 @@
 package com.TheaterApp;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Theater implements Serializable {
@@ -51,12 +52,29 @@ public class Theater implements Serializable {
             return null;
         }
     }
-
+    // not done
     public int removeClient(String clientId){
         Client client = clientList.search(clientId);
         if (client == null) {
             return(CLIENT_NOT_FOUND);
-        }if (client.getShow().getPlayEndDate()< Date.)
+        }
+        return -1;
+
+    }
+    public void clientList(){
+        System.out.println(clientList.toString());
+
+    }
+
+    public boolean addCustomer(String name, String address,
+                            String phoneNumber, String cardNumber, String expDate){
+        Customer customer = new Customer(name,address,phoneNumber);
+        CreditCard card = new CreditCard(cardNumber,expDate, customer.getId());
+
+        if (customerList.insertCustomer(customer) && wallet.addCard(card)){
+            return true;
+        }
+        return false;
 
     }
 

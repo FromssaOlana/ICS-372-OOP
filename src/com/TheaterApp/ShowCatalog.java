@@ -126,7 +126,7 @@ public class ShowCatalog implements Serializable {
      * String form of the collection
      */
     public String toString() {
-        return showCatalog.toString();
+        return showList.toString();
     }
 
 }
