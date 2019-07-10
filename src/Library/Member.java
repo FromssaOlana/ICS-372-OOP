@@ -30,7 +30,7 @@ public class Member implements Serializable {
   private List booksOnHold = new LinkedList();
   private List transactions = new LinkedList();
   /**
-   * Represents a single member
+   * Represents a single member d
    * @param name name of the member
    * @param address address of the member
    * @param phone phone number of the member
