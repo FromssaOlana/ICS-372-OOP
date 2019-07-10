@@ -18,7 +18,6 @@ public class Client implements Serializable {
     private String phoneNumber;
     private static final String CLIENT_STRING = "CLIENT";
     private List creditCards = new LinkedList();
-    private List bookedShows = new LinkedList();
 
     public Client(String name, String address, String phoneNumber) {
         this.name = name;

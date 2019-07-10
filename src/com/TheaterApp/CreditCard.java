@@ -1,16 +1,16 @@
 package com.TheaterApp;
 
+import java.util.Objects;
+
 public class CreditCard {
     private String cardNumber;
     private String expDate;
-    private String cardId;
     private String customersID;
 
     public CreditCard(String cardNumber, String expDate, String customersID){
         this.cardNumber = cardNumber;
         this.expDate = expDate;
         this.customersID = customersID;
-        this.cardId = cardNumber.substring(cardNumber.length() - 4); // last four number of card
     }
 
     public String getCardNumber() {
@@ -29,14 +29,6 @@ public class CreditCard {
         this.expDate = expDate;
     }
 
-    public String getCardId() {
-        return cardId;
-    }
-
-    public void setCardId(String cardId) {
-        this.cardId = cardId;
-    }
-
     public String getCustomersID() {
         return customersID;
     }
@@ -45,8 +37,17 @@ public class CreditCard {
         this.customersID = customersID;
     }
 
-    public String getId() {
-        return cardId;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CreditCard card = (CreditCard) o;
+        return cardNumber.equals(card.cardNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cardNumber);
     }
 
     public String toString(){

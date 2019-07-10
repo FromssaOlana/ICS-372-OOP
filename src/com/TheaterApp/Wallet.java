@@ -35,35 +35,63 @@ public class Wallet implements Serializable {
         }
     }
 
+    public int size(){
+        return creditWallet.size();
+    }
+
     /**
      * Checks whether a card with a given card id exists.
      *
-     * @param cardId the id of the card
+     * @param cardNumber the id of the card
      * @return true iff the book exists
      */
-    public CreditCard search(String cardId) {
+    public CreditCard search(String cardNumber) {
         for (Iterator iterator = creditWallet.iterator(); iterator.hasNext(); ) {
             CreditCard card = (CreditCard) iterator.next();
-            if (card.getId().equals(cardId)) {
+            if (card.getCardNumber().equals(cardNumber)) {
                 return card;
             }
         }
         return null;
     }
 
+    public boolean cardExist(CreditCard card) {
+        for (Iterator iterator = creditWallet.iterator(); iterator.hasNext(); ) {
+            CreditCard card1= (CreditCard) iterator.next();
+            if (card1.equals(card)) {
+                return true;
+            }
+
+        }
+        return false;
+
+    }
+    public boolean cardUsed(String cardNumber) {
+        for (Iterator iterator = creditWallet.iterator(); iterator.hasNext(); ) {
+            CreditCard card = (CreditCard) iterator.next();
+            if (card.getCardNumber().equals(cardNumber)) {
+                return true;
+            }
+
+        }
+        return false;
+
+    }
+
     /**
      * Removes a client from the catalog
      *
-     * @param cardId client id
+     * @param customerId client id
      * @return true iff client could be removed
      */
-    public boolean removeCard(String cardId) {
-        CreditCard card = search(cardId);
-        if (card == null) {
-            return false;
-        } else {
-            return creditWallet.remove(card);
+    public boolean remove(String customerId) {
+        for (Iterator iterator = creditWallet.iterator(); iterator.hasNext(); ) {
+            CreditCard card = (CreditCard) iterator.next();
+            if (card.getCustomersID().equals(customerId)) {
+                creditWallet.remove(card);
+            }
         }
+        return true;
     }
 
     /**
@@ -75,6 +103,11 @@ public class Wallet implements Serializable {
     public boolean addCard(CreditCard card) {
         creditWallet.add(card);
         return true;
+    }
+    public boolean removeCard(CreditCard card) {
+        creditWallet.remove(card);
+        return true;
+
     }
 
     /**
@@ -121,6 +154,8 @@ public class Wallet implements Serializable {
             cnfe.printStackTrace();
         }
     }
+
+
 
     /**
      * String form of the collection

@@ -48,6 +48,16 @@ public class CustomerList {
         }
         return null;
     }
+
+    public Customer searchByCard(String cardNumber) {
+        for (Iterator iterator = customers.iterator(); iterator.hasNext(); ) {
+            Customer customer = (Customer) iterator.next();
+            if (customer.hasCard(cardNumber)) {
+                return customer;
+            }
+        }
+        return null;
+    }
     /**
      * Inserts a member into the collection
      * @param customer the member to be inserted

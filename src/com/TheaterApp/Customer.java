@@ -4,6 +4,7 @@ import Library.Book;
 import Library.Hold;
 import Library.MemberIdServer;
 import Library.Transaction;
+import java.util.Iterator;
 
 import java.io.Serializable;
 import java.util.*;
@@ -17,7 +18,7 @@ public class Customer implements Serializable {
     private static final String CUSTOMER_STRING = "CUSTOMER";
     private List showsBooked = new LinkedList();
     private List creditCards = new LinkedList();
-    private List transactions = new LinkedList();
+   // private List transactions = new LinkedList();
     /**
      * Represents a single member d
      * @param name name of the member
@@ -38,6 +39,33 @@ public class Customer implements Serializable {
     public boolean bookShow(Show show) {
         if (showsBooked.add(show)) {
             return true;
+        }
+        return false;
+    }
+
+    public boolean addCard(CreditCard card){
+        creditCards.add(card);
+        return  true;
+    }
+
+    public boolean removeCard(CreditCard card){
+        if (!(creditCards.size() == 0 )){
+            creditCards.remove(card);
+            return true;
+        }
+        return false;
+    }
+
+    public int numOfCard(){
+        return creditCards.size();
+    }
+
+    public boolean hasCard(String cardNumber) {
+        for (Iterator iterator = creditCards.iterator(); iterator.hasNext(); ) {
+            CreditCard card = (CreditCard) iterator.next();
+            if (card.getCardNumber().equals(cardNumber)) {
+                return true;
+            }
         }
         return false;
     }
@@ -64,38 +92,6 @@ public class Customer implements Serializable {
         return (showsBooked.listIterator());
     }
 
-    /**
-     * Removes a hold
-     * @param bookId the book id for removing a hold
-     * @return true iff the hold could be removed
-     */
-    public boolean removeHold(String bookId) {
-        for (ListIterator iterator = creditCards.listIterator(); iterator.hasNext(); ) {
-            Hold hold = (Hold) iterator.next();
-            String id = hold.getBook().getId();
-            if (id.equals(bookId)) {
-                transactions.add(new Transaction ("Hold Removed ", hold.getBook().getTitle()));
-                iterator.remove();
-                return true;
-            }
-        }
-        return false;
-    }
-    /**
-     * Gets an iterator to a collection of selected ransactions
-     * @param date the date for which the transactions have to be retrieved
-     * @return the iterator to the collection
-     */
-    public Iterator getTransactions(Calendar date) {
-        List result = new LinkedList();
-        for (Iterator iterator = transactions.iterator(); iterator.hasNext(); ) {
-            Transaction transaction = (Transaction) iterator.next();
-            if (transaction.onDate(date)) {
-                result.add(transaction);
-            }
-        }
-        return (result.iterator());
-    }
     /**
      * Getter for name
      * @return member name

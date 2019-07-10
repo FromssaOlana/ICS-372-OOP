@@ -1,8 +1,12 @@
 package com.TheaterApp;
 
-import java.io.Serializable;
+import Library.Library;
+import Library.MemberIdServer;
+
+import java.io.*;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 
 public class Theater implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -71,12 +75,129 @@ public class Theater implements Serializable {
         Customer customer = new Customer(name,address,phoneNumber);
         CreditCard card = new CreditCard(cardNumber,expDate, customer.getId());
 
-        if (customerList.insertCustomer(customer) && wallet.addCard(card)){
+        if (!wallet.cardExist(card)){
+            card.setCustomersID(customer.getId());// setting the owner of the card
+            customer.addCard(card); // setting the card to the owner
+            customerList.insertCustomer(customer);
+            wallet.addCard(card);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeCustomer(String customerID) {
+        Customer customer = customerList.search(customerID);
+        if (customerList.search(customerID ) != null){
+            wallet.remove(customerID);
+            customerList.removeCustomer(customerID);
             return true;
         }
         return false;
 
     }
 
+    public boolean addCreditCard(String customerID,String cardNumber, String expDate){
+        if (!wallet.cardUsed(cardNumber)){
+           Customer customer = customerList.search(customerID);
+           CreditCard card = new CreditCard(cardNumber,expDate,customerID);
 
+           customer.addCard(card);
+           card.setCustomersID(customerID);
+           wallet.addCard(card);
+           return true;
+        }
+        return false;
+
+    }
+
+    public boolean removeCreditCard(String cardNumber){
+        Customer customer = customerList.searchByCard(cardNumber);
+        CreditCard card = wallet.search(cardNumber);
+        if (customer.numOfCard()>1){
+            customer.removeCard(card);
+            wallet.removeCard(card);
+            return true;
+        }
+        return false;
+    }
+
+    public void listOfCustomers(){
+        System.out.println(customerList.toString());
+    }
+
+// Note done. check the availability of the date first.
+    public boolean addShow(String showName, String clientID, String strDate, String endDate ){
+            Show show = new Show(showName, strDate,endDate);
+           Client client = clientList.search(clientID);
+           client.setShow(show);
+           show.setClient(client);
+           showCatalog.addShow(show);
+           return true;
+
+    }
+
+    public void listOfShow(){
+        System.out.println(showCatalog.toString());
+    }
+
+
+
+
+    /**
+     * Serializes the Library object
+     * @return true iff the data could be saved
+     */
+    public static  boolean save() {
+        try {
+            FileOutputStream file = new FileOutputStream("LibraryData");
+            ObjectOutputStream output = new ObjectOutputStream(file);
+            output.writeObject(theater);
+            output.writeObject(MemberIdServer.instance());
+            return true;
+        } catch(IOException ioe) {
+            ioe.printStackTrace();
+            return false;
+        }
+    }
+    /**
+     * Writes the object to the output stream
+     * @param output the stream to be written to
+     */
+    private void writeObject(ObjectOutputStream output) {
+        try {
+            output.defaultWriteObject();
+            output.writeObject(theater);
+        } catch(IOException ioe) {
+            System.out.println(ioe);
+        }
+    }
+    /**
+     * Reads the object from a given stream
+     * @param input the stream to be read
+     */
+    private void readObject(ObjectInputStream input) {
+        try {
+            input.defaultReadObject();
+            if (theater == null) {
+                theater = (Theater) input.readObject();
+            } else {
+                input.readObject();
+            }
+        } catch(IOException ioe) {
+            ioe.printStackTrace();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    /** String form of the library
+     *
+     */
+    @Override
+    public String toString() {
+        return customerList + "\n" +
+                clientList + "\n"+ showCatalog +"\n"+ wallet;
+    }
 }
+
+
+

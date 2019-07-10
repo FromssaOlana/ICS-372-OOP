@@ -1,63 +1,58 @@
 package com.TheaterApp;
 
-import java.awt.*;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
 
 public class Show {
-    private  String playName;
-    private Calendar playStartDate;
-    private Calendar playEndDate;
-    private String showID;
-    private static final String SHOW_STRING = "SHOW ";
+    private String showName;
+    private Calendar showStartDate;
+    private Calendar showEndDate;
+    private Client client;
     private List bookedCustumersList = new LinkedList<Customer>();
 
-    public Show(String playName){
-        this.playName = playName;
-        showID = SHOW_STRING + ShowIdServer.instance().getId();
+    public Show(String showName, String showStartDate, String showEndDate) {
+        this.showName = showName;
+        this.showEndDate = new GregorianCalendar();
+        this.showStartDate = new GregorianCalendar();
+
     }
 
-    public String getId() {
-        return showID;
+    public String getShowName() {
+        return showName;
     }
 
-
-    public String getPlayName() {
-        return playName;
+    public void setClient(Client client) {
+        this.client = client;
+    }
+    public Client getClient(){
+        return this.client;
     }
 
-    public void setPlayName(String playName) {
-        this.playName = playName;
+    public void setShowName(String showName) {
+
+        this.showName = showName;
     }
 
-    public Calendar getPlayStartDate() {
-        return playStartDate;
+    public Calendar getShowStartDate() {
+        return showStartDate;
     }
 
-    public void setPlayStartDate(Calendar playStartDate) {
-        this.playStartDate = playStartDate;
+    public void setShowStartDate(Calendar showStartDate) {
+
+        this.showStartDate = showStartDate;
     }
 
-    public Calendar getPlayEndDate() {
-        return playEndDate;
+    public Calendar getShowEndDate(){
+        return showEndDate;
     }
 
-    public void setPlayEndDate(Calendar playEndDate) {
-        this.playEndDate = playEndDate;
-    }
+    public void setShowEndDate(Calendar showEndDate) {
 
-    public String getShowID() {
-        return showID;
-    }
-
-    public void setShowID(String showID) {
-        this.showID = showID;
+        this.showEndDate = showEndDate;
     }
 
     public boolean removeCustomer(Customer customer) {
-        if (bookedCustumersList.remove(customer)){
+        if (bookedCustumersList.remove(customer)) {
             return true;
         }
         return false;

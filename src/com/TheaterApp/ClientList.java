@@ -81,11 +81,11 @@ public class ClientList implements Serializable {
     }
 
     /**
-     * Returns an iterator to all books
+     * Returns an iterator to all clients
      *
      * @return iterator to the collection
      */
-    public Iterator getClient() {
+    public Iterator getClients() {
         return clientLinkedList.iterator();
     }
 
