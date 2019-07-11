@@ -38,13 +38,13 @@ public class ShowCatalog implements Serializable {
     /**
      * Checks whether a book with a given book id exists.
      *
-     * @param showId the id of the book
+     * @param showName the id of the book
      * @return true iff the book exists
      */
-    public Show search(String showId) {
+    public Show search(String showName) {
         for (Iterator iterator = showList.iterator(); iterator.hasNext(); ) {
             Show show = (Show) iterator.next();
-            if (show.getId().equals(showId)) {
+            if (show.getShowName().equals(showName)) {
                 return show;
             }
         }
@@ -54,11 +54,11 @@ public class ShowCatalog implements Serializable {
     /**
      * Removes a client from the catalog
      *
-     * @param showId client id
+     * @param showName client id
      * @return true iff client could be removed
      */
-    public boolean removeShow(String showId) {
-        Show show = search(showId);
+    public boolean removeShow(String showName) {
+        Show show = search(showName);
         if (show == null) {
             return false;
         } else {

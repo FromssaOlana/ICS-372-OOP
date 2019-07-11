@@ -62,12 +62,12 @@ public class Theater implements Serializable {
 
     }
 
-    public void clientList(){
-        System.out.println(clientList.toString());
+    public String clientList(){
+        return clientList.toString();
 
     }
 
-    public boolean addCustomer(String name, String address,
+    public Customer addCustomer(String name, String address,
                             String phoneNumber, String cardNumber, String expDate){
         Customer customer = new Customer(name,address,phoneNumber);
         CreditCard card = new CreditCard(cardNumber,expDate, customer.getId());
@@ -77,9 +77,9 @@ public class Theater implements Serializable {
             customer.addCard(card); // setting the card to the owner
             customerList.insertCustomer(customer);
             wallet.addCard(card);
-            return true;
+            return customer;
         }
-        return false;
+       return null;
     }
 
     public boolean removeCustomer(String customerID) {
@@ -118,23 +118,23 @@ public class Theater implements Serializable {
         return false;
     }
 
-    public void listOfCustomers(){
-        System.out.println(customerList.toString());
+    public String listOfCustomers(){
+        return customerList.toString();
     }
 
 // Note done. check the availability of the date first.
-    public boolean addShow(String showName, String clientID, String strDate, String endDate ){ // dd/mm/yyyy format
+    public Show addShow(String showName, String clientID, String strDate, String endDate ){ // dd/mm/yyyy format
             Show show = new Show(showName, strDate,endDate);
            Client client = clientList.search(clientID);
            client.setShow(show);
            show.setClient(client);
            showCatalog.addShow(show);
-           return true;
+           return show;
 
     }
 
-    public void listOfShow(){
-        System.out.println(showCatalog.toString());
+    public String listOfShow(){
+       return showCatalog.toString();
     }
 
 
