@@ -11,9 +11,18 @@ public class Show {
     private List bookedCustumersList = new LinkedList<Customer>();
 
     public Show(String showName, String showStartDate, String showEndDate) {
+
+        String startDate = showStartDate; // dd/mm/yyyy
+        String[] stringArray = startDate.split("/");
+        int[] intArray = new int[stringArray.length];
+        this.showStartDate = new GregorianCalendar(intArray[2],intArray[1],intArray[0]);
+
+        String endDate = showStartDate;
+        String[] stringArray2 = endDate.split("/");
+        int[] intArray2 = new int[stringArray2.length];
+
+        this.showEndDate = new GregorianCalendar(intArray2[2],intArray2[1],intArray2[0]);
         this.showName = showName;
-        this.showEndDate = new GregorianCalendar();
-        this.showStartDate = new GregorianCalendar();
 
     }
 

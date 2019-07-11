@@ -10,12 +10,6 @@ import java.util.Iterator;
 
 public class Theater implements Serializable {
     private static final long serialVersionUID = 1L;
-
-    public static final int CLIENT_NOT_FOUND = 1;
-    public static final int SHOW_NOT_FOUND  = 2;
-    public static final int CUSTOMER_NOT_FOUND  = 3;
-    public static final int CARD_NOT_FOUND  = 4;
-   // public static final int _NOT_FOUND   = 5;
     private Wallet wallet;
     private ShowCatalog showCatalog;
     private ClientList clientList;
@@ -32,7 +26,6 @@ public class Theater implements Serializable {
     public static Theater instance(){
         if (theater == null){
             // instantiating all singletons
-            ShowIdServer.instance();
             CustomerIdServer.instance();
             ClientIdServer.instance();
             return theater = new Theater();
@@ -56,15 +49,19 @@ public class Theater implements Serializable {
             return null;
         }
     }
-    // not done
-    public int removeClient(String clientId){
+
+    public boolean removeClient(String clientId){
         Client client = clientList.search(clientId);
-        if (client == null) {
-            return(CLIENT_NOT_FOUND);
+        if (clientList.search(clientId) != null){
+            if (client.getShow() == null || client.getShow().getShowEndDate().before(Calendar.getInstance()) ) {
+                clientList.removeClient(clientId);
+                return true;
+            }
         }
-        return -1;
+        return false;
 
     }
+
     public void clientList(){
         System.out.println(clientList.toString());
 
@@ -126,7 +123,7 @@ public class Theater implements Serializable {
     }
 
 // Note done. check the availability of the date first.
-    public boolean addShow(String showName, String clientID, String strDate, String endDate ){
+    public boolean addShow(String showName, String clientID, String strDate, String endDate ){ // dd/mm/yyyy format
             Show show = new Show(showName, strDate,endDate);
            Client client = clientList.search(clientID);
            client.setShow(show);
@@ -141,15 +138,31 @@ public class Theater implements Serializable {
     }
 
 
+    public static Theater retrieve() {
+        try {
+            FileInputStream file = new FileInputStream("TheaterData");
+            ObjectInputStream input = new ObjectInputStream(file);
+            input.readObject();
+            CustomerIdServer.retrieve(input);
+            ClientIdServer.retrieve(input);
+            return theater;
+        } catch(IOException ioe) {
+            ioe.printStackTrace();
+            return null;
+        } catch(ClassNotFoundException cnfe) {
+            cnfe.printStackTrace();
+            return null;
+        }
+    }
 
 
     /**
-     * Serializes the Library object
+     * Serializes the Theater object
      * @return true iff the data could be saved
      */
     public static  boolean save() {
         try {
-            FileOutputStream file = new FileOutputStream("LibraryData");
+            FileOutputStream file = new FileOutputStream("TheaterData");
             ObjectOutputStream output = new ObjectOutputStream(file);
             output.writeObject(theater);
             output.writeObject(MemberIdServer.instance());
