@@ -14,14 +14,17 @@ public class CreditCard {
     }
 
     public String getCardNumber() {
+
         return cardNumber;
     }
 
     public void setCardNumber(String cardNumber) {
+
         this.cardNumber = cardNumber;
     }
 
     public String getExpDate() {
+
         return expDate;
     }
 
@@ -30,10 +33,12 @@ public class CreditCard {
     }
 
     public String getCustomersID() {
+
         return customersID;
     }
 
     public void setCustomersID(String customersID) {
+
         this.customersID = customersID;
     }
 
@@ -50,7 +55,7 @@ public class CreditCard {
         return Objects.hash(cardNumber);
     }
 
-    public String toString(){
+    public String toString() {
         return "[ "+ " Card Number: " + cardNumber +"\nExp Date: "+ expDate;
     }
 }

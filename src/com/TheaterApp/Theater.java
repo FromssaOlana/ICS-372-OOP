@@ -1,12 +1,7 @@
 package com.TheaterApp;
-
-import Library.Library;
-import Library.MemberIdServer;
-
 import java.io.*;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
+
 
 public class Theater implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -107,13 +102,21 @@ public class Theater implements Serializable {
 
     }
 
-    public boolean removeCreditCard(String cardNumber){
-        Customer customer = customerList.searchByCard(cardNumber);
+    public boolean removeCreditCard(String cardNumber) {
+        if (wallet.search(cardNumber) == null) {
+            System.out.println("Wallet is empty!");
+            return false;
+        }
         CreditCard card = wallet.search(cardNumber);
-        if (customer.numOfCard()>1){
-            customer.removeCard(card);
-            wallet.removeCard(card);
-            return true;
+        if (card != null) {
+            Customer customer = customerList.searchByCard(cardNumber);
+
+            if (customer.numOfCard() > 1) {
+                customer.removeCard(card);
+                wallet.removeCard(card);
+                return true;
+            }
+
         }
         return false;
     }
@@ -143,7 +146,7 @@ public class Theater implements Serializable {
             FileInputStream file = new FileInputStream("TheaterData");
             ObjectInputStream input = new ObjectInputStream(file);
             input.readObject();
-            CustomerIdServer.retrieve(input);
+            //CustomerIdServer.retrieve(input);
             ClientIdServer.retrieve(input);
             return theater;
         } catch(IOException ioe) {
@@ -165,7 +168,8 @@ public class Theater implements Serializable {
             FileOutputStream file = new FileOutputStream("TheaterData");
             ObjectOutputStream output = new ObjectOutputStream(file);
             output.writeObject(theater);
-            output.writeObject(MemberIdServer.instance());
+           output.writeObject(CustomerIdServer.instance());
+            output.writeObject(ClientIdServer.instance());
             return true;
         } catch(IOException ioe) {
             ioe.printStackTrace();

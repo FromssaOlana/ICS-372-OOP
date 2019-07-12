@@ -31,9 +31,11 @@ public class Show {
     }
 
     public void setClient(Client client) {
+
         this.client = client;
     }
     public Client getClient(){
+
         return this.client;
     }
 
@@ -43,6 +45,7 @@ public class Show {
     }
 
     public Calendar getShowStartDate() {
+
         return showStartDate;
     }
 
@@ -52,6 +55,7 @@ public class Show {
     }
 
     public Calendar getShowEndDate(){
+
         return showEndDate;
     }
 
@@ -65,5 +69,15 @@ public class Show {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Show[" +
+                "showName='" + showName + '\'' +
+                ", showStartDate=" + showStartDate +
+                ", showEndDate=" + showEndDate +
+                ", client=" + client +
+                ']';
     }
 }

@@ -1,7 +1,4 @@
 package com.TheaterApp;
-
-import Library.Library;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -177,7 +174,7 @@ public class UserInterface {
      * uses the appropriate Library method for adding the member.
      */
     public void addClient() {
-        String name = getToken("Enter member name");
+        String name = getToken("Enter client name");
         String address = getToken("Enter address");
         String phone = getToken("Enter phone");
         Client result;
@@ -185,7 +182,7 @@ public class UserInterface {
         if (result == null) {
             System.out.println("Could not add member");
         }
-        System.out.println(result);
+        System.out.println("New client added ");
     }
 
     /**
@@ -196,7 +193,7 @@ public class UserInterface {
     public void addCustomer() {
         Customer result;
         do {
-            String name = getToken("Enter  name");
+            String name = getToken("Enter customer name");
             String address = getToken("Enter address");
             String phone_number = getToken("Enter phone number");
             String card_number = getToken("Enter card number");
@@ -207,6 +204,7 @@ public class UserInterface {
             } else {
                 System.out.println("Customer could not be added");
             }
+            System.out.println("New Customer added");
             if (!yesOrNo("Add more customer?")) {
                 break;
             }
@@ -215,20 +213,30 @@ public class UserInterface {
 
     public void addShow() {
 
-        String name = getToken("Enter member name");
+        String name = getToken("Enter show name");
         String client_id = getToken("Enter client Id");
-        String start_date = getToken("Enter start date");
-        String end_date = getToken("Enter end date");
+        String start_date = getToken("Enter start date: dd/mm/yyyy");
+        String end_date = getToken("Enter end date: dd/mm/yyyy");
         Show result;
         result = theater.addShow(name, client_id, start_date, end_date);
         if (result == null) {
             System.out.println("Could not add show");
         }
-        System.out.println(result);
+        System.out.println("Show added");
 
     }
 
     public void addCreditCard() {
+        String customer_id = getToken("Enter customerID");
+        String credit_card_number = getToken("Enter card number");
+        String exp_date = getToken("Enter exp date");
+        boolean result;
+        result = theater.addCreditCard(customer_id,credit_card_number,exp_date);
+        if (!result){
+            System.out.println("could not add credit card");
+        }
+        System.out.println("New card added.");
+
     }
 
     public void removeClient() {
@@ -257,19 +265,22 @@ public class UserInterface {
         result = theater.removeCreditCard(credit_card_number);
         if (!result) {
             System.out.println("Could not remove credit card");
+        }else {
+            System.out.println("Credit card removed");
         }
-        System.out.println("Credit card removed");
-
     }
 
     public void listAllClients(){
+
         System.out.println(theater.clientList());
     }
 
-    public void listAllCustomers(){
+    public void listAllCustomers()
+    {
         System.out.println(theater.listOfCustomers());
     }
     public void listAllShows(){
+
         System.out.println(theater.listOfShow());
     }
     /**
@@ -361,6 +372,7 @@ public class UserInterface {
      * @param args not used
      */
     public static void main(String[] args) {
+
         UserInterface.instance().process();
     }
 }

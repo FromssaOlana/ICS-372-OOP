@@ -13,6 +13,7 @@ public class CustomerIdServer  implements Serializable {
      *
      */
     private CustomerIdServer() {
+
         idCounter = 1;
     }
     /**

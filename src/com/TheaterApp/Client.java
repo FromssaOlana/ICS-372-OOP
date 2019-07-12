@@ -1,11 +1,5 @@
 package com.TheaterApp;
-
-import Library.Book;
-import Library.Hold;
-import Library.Transaction;
-
 import java.io.Serializable;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,18 +21,22 @@ public class Client implements Serializable {
     }
 
     public void setName(String name) {
+
         this.name = name;
     }
 
     public String getName() {
+
         return name;
     }
 
     public void setAddress(String address) {
+
         this.address = address;
     }
 
     public String getAddress() {
+
         return address;
     }
 
@@ -51,10 +49,12 @@ public class Client implements Serializable {
     }
 
     public String getId() {
+
         return id;
     }
 
     public boolean equals(String id) {
+
         return this.id.equals(id);
     }
     public String toString(){

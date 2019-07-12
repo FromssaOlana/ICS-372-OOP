@@ -1,11 +1,5 @@
 package com.TheaterApp;
-
-import Library.Book;
-import Library.Hold;
-import Library.MemberIdServer;
-import Library.Transaction;
 import java.util.Iterator;
-
 import java.io.Serializable;
 import java.util.*;
 
@@ -148,6 +142,10 @@ public class Customer implements Serializable {
      */
     public boolean equals(String id) {
         return this.id.equals(id);
+    }
+
+    public String toString(){
+        return "\nCustomer Name: "+ this.name +"\nAddress: "+ this.address+"\nPhone Number: "+ this.phone;
     }
 
 }

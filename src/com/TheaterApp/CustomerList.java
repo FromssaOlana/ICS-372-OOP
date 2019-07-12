@@ -1,7 +1,4 @@
 package com.TheaterApp;
-
-import Library.MemberList;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

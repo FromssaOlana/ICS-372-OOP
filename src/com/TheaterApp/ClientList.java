@@ -1,8 +1,5 @@
 package com.TheaterApp;
 
-import Library.Book;
-import Library.Catalog;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -39,7 +36,7 @@ public class ClientList implements Serializable {
     }
 
     /**
-     * Checks whether a book with a given book id exists.
+     * Checks whether a client with a given client id exists.
      *
      * @param clientId the id of the book
      * @return true iff the book exists
@@ -86,6 +83,7 @@ public class ClientList implements Serializable {
      * @return iterator to the collection
      */
     public Iterator getClients() {
+
         return clientLinkedList.iterator();
     }
 
