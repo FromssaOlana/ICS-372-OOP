@@ -4,15 +4,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class ShowCatalog implements Serializable {
+public class ShowCatalog extends ItemList<Show, String> implements Serializable {
 
 
     private static final long serialVersionUID = 1L;
-    private List showList = new LinkedList<Show>();
     private static ShowCatalog showCatalog;
 
     /*
@@ -36,55 +35,40 @@ public class ShowCatalog implements Serializable {
     }
 
     /**
-     * Checks whether a book with a given book id exists.
+     * Checks whether a show with a given show name exists.
      *
      * @param showName the id of the book
      * @return true iff the book exists
      */
     public Show search(String showName) {
-        for (Iterator iterator = showList.iterator(); iterator.hasNext(); ) {
-            Show show = (Show) iterator.next();
-            if (show.getShowName().equals(showName)) {
-                return show;
-            }
-        }
-        return null;
+      return super.search(showName);
     }
 
     /**
      * Removes a client from the catalog
      *
-     * @param showName client id
+     * @param show client id
      * @return true iff client could be removed
      */
-    public boolean removeShow(String showName) {
-        Show show = search(showName);
-        if (show == null) {
-            return false;
-        } else {
-            return showList.remove(show);
-        }
+    public boolean removeShow(Show show) {
+        return super.remove(show);
     }
 
     /**
-     * Inserts a book into the collection
+     * Inserts a show into the collection
      *
      * @param show the client to be inserted
      * @return true iff the client could be inserted. Currently always true
      */
     public boolean addShow(Show show) {
-        showList.add(show);
-        return true;
+       return super.add(show);
+
+    }
+    /// NOT done yet!
+    private boolean isOpen(Show show){
+      return false;
     }
 
-    /**
-     * Returns an iterator to all books
-     *
-     * @return iterator to the collection
-     */
-    public Iterator getShow() {
-        return showList.iterator();
-    }
 
     /*
      * Supports serialization
@@ -93,7 +77,7 @@ public class ShowCatalog implements Serializable {
     private void writeObject(ObjectOutputStream output) {
         try {
             output.defaultWriteObject();
-            output.writeObject(showList);
+            output.writeObject(showCatalog);
         } catch (IOException ioe) {
             System.out.println(ioe);
         }
@@ -127,7 +111,7 @@ public class ShowCatalog implements Serializable {
      */
     public String toString() {
 
-        return showList.toString();
+        return super.toString();
     }
 
 }

@@ -8,11 +8,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Wallet implements Serializable {
+public class Wallet extends ItemList<CreditCard,String> implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private static Wallet wallet;
-    private List creditWallet = new LinkedList<CreditCard>();
 
 
     /*
@@ -36,7 +35,7 @@ public class Wallet implements Serializable {
     }
 
     public int size(){
-        return creditWallet.size();
+        return super.size();
     }
 
     /**
@@ -46,52 +45,24 @@ public class Wallet implements Serializable {
      * @return true iff the book exists
      */
     public CreditCard search(String cardNumber) {
-        for (Iterator iterator = creditWallet.iterator(); iterator.hasNext(); ) {
-            CreditCard card = (CreditCard) iterator.next();
-            if (card.getCardNumber().equals(cardNumber)) {
-                return card;
-            }
-        }
-        return null;
-    }
-
-    public boolean cardExist(CreditCard card) {
-        for (Iterator iterator = creditWallet.iterator(); iterator.hasNext(); ) {
-            CreditCard card1= (CreditCard) iterator.next();
-            if (card1.equals(card)) {
-                return true;
-            }
-
-        }
-        return false;
-
-    }
-    public boolean cardUsed(String cardNumber) {
-        for (Iterator iterator = creditWallet.iterator(); iterator.hasNext(); ) {
-            CreditCard card = (CreditCard) iterator.next();
-            if (card.getCardNumber().equals(cardNumber)) {
-                return true;
-            }
-
-        }
-        return false;
-
+     return super.search(cardNumber);
     }
 
     /**
      * Removes a client from the catalog
      *
-     * @param customerId client id
+     * @param creditCard client id
      * @return true iff client could be removed
      */
-    public boolean remove(String customerId) {
-        for (Iterator iterator = creditWallet.iterator(); iterator.hasNext(); ) {
-            CreditCard card = (CreditCard) iterator.next();
-            if (card.getCustomersID().equals(customerId)) {
-                creditWallet.remove(card);
+    public boolean remove(CreditCard creditCard) {
+        return super.remove(creditCard);
+    }
+    public void removeAssociatedCards(String customerId){
+        for (CreditCard card: super.getList() ){
+            if (card.getCustomersID().equals(customerId)){
+                remove(card);
             }
         }
-        return true;
     }
 
     /**
@@ -101,22 +72,11 @@ public class Wallet implements Serializable {
      * @return true iff the client could be inserted. Currently always true
      */
     public boolean addCard(CreditCard card) {
-        creditWallet.add(card);
-        return true;
+        return super.add(card);
     }
     public boolean removeCard(CreditCard card) {
-        creditWallet.remove(card);
-        return true;
+        return super.remove(card);
 
-    }
-
-    /**
-     * Returns an iterator to all cards
-     *
-     * @return iterator to the collection
-     */
-    public Iterator getCreditCards() {
-        return creditWallet.iterator();
     }
 
     /*
@@ -126,7 +86,7 @@ public class Wallet implements Serializable {
     private void writeObject(ObjectOutputStream output) {
         try {
             output.defaultWriteObject();
-            output.writeObject(creditWallet);
+            output.writeObject(wallet);
         } catch (IOException ioe) {
             System.out.println(ioe);
         }
@@ -162,7 +122,7 @@ public class Wallet implements Serializable {
      */
     public String toString() {
 
-        return creditWallet.toString();
+        return super.toString();
     }
 }
 

@@ -3,20 +3,30 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Client implements Serializable {
+public class Client implements Serializable, Matchable<String> {
     private static final long serialVersionUID = 1L;
     private String name;
     private String address;
     private Show show;
     private String id;
+    private double balance;
     private String phoneNumber;
     private static final String CLIENT_STRING = "CLIENT";
     private List creditCards = new LinkedList();
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
 
     public Client(String name, String address, String phoneNumber) {
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
+        this.balance = 0.0;
         this.id = CLIENT_STRING + ClientIdServer.instance().getId();
     }
 
@@ -62,4 +72,8 @@ public class Client implements Serializable {
     }
 
 
+    @Override
+    public boolean matches(String key) {
+        return this.id.equals(key);
+    }
 }

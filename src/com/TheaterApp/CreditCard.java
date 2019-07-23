@@ -1,8 +1,9 @@
 package com.TheaterApp;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class CreditCard {
+ public class CreditCard implements Serializable, Matchable<String> {
     private String cardNumber;
     private String expDate;
     private String customersID;
@@ -54,8 +55,12 @@ public class CreditCard {
     public int hashCode() {
         return Objects.hash(cardNumber);
     }
+     @Override
+     public boolean matches(String cardNumber) {
+         return this.cardNumber.equals(cardNumber);
+     }
 
     public String toString() {
-        return "[ "+ " Card Number: " + cardNumber +"\nExp Date: "+ expDate;
+        return "[ "+ " Card Number: " + cardNumber +"\nExp Date: "+ expDate +" ]";
     }
 }

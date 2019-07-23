@@ -179,9 +179,9 @@ public class UserInterface {
         Client result;
         result = theater.addClient(name, address, phone);
         if (result == null) {
-            System.out.println("Could not add member");
+            System.out.println("Could not add CLIENT");
         }
-        System.out.println("New client added ");
+        System.out.println( result + "New client added ");
     }
 
     /**
@@ -200,10 +200,10 @@ public class UserInterface {
             result = theater.addCustomer(name, address, phone_number, card_number, exp_date);
             if (result != null) {
                 System.out.println(result);
+                System.out.println("New Customer added");
             } else {
-                System.out.println("Customer could not be added");
+                System.out.println("Customer could not be added. Card might be used already.");
             }
-            System.out.println("New Customer added");
             if (!yesOrNo("Add more customer?")) {
                 break;
             }
@@ -216,13 +216,13 @@ public class UserInterface {
         String client_id = getToken("Enter client Id");
         String start_date = getToken("Enter start date: dd/mm/yyyy");
         String end_date = getToken("Enter end date: dd/mm/yyyy");
-        Show result;
-        result = theater.addShow(name, client_id, start_date, end_date);
-        if (result == null) {
-            System.out.println("Could not add show");
-        }
-        System.out.println("Show added");
 
+
+        if (theater.addShow(name, client_id, start_date, end_date) != null) {
+            System.out.println("Show added");
+        }else {
+            System.out.println("Could not add show. Client might not registered or invalid date");
+        }
     }
 
     public void addCreditCard() {
@@ -231,18 +231,16 @@ public class UserInterface {
         String exp_date = getToken("Enter exp date");
         boolean result;
         result = theater.addCreditCard(customer_id,credit_card_number,exp_date);
-        if (!result){
+        if (result){
+            System.out.println("New card added.");
+        }else {
             System.out.println("could not add credit card");
         }
-        System.out.println("New card added.");
-
     }
 
     public void removeClient() {
         String client_id = getToken("Enter client Id");
-        boolean result;
-        result = theater.removeClient(client_id);
-        if (!result) {
+        if (!theater.removeClient(client_id)) {
             System.out.println("Could not remove client");
         }
         System.out.println("Client removed ");
@@ -250,8 +248,9 @@ public class UserInterface {
 
     public void removeCustomer() {
         String customer_id = getToken("Enter customer Id");
+        Customer customer = theater.searchCustomer(customer_id);
         boolean result;
-        result = theater.removeCustomer(customer_id);
+        result = theater.removeCustomer(customer);
         if (!result) {
             System.out.println("Could not remove customer");
         }

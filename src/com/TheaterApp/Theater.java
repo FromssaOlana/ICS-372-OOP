@@ -47,18 +47,15 @@ public class Theater implements Serializable {
 
     public boolean removeClient(String clientId){
         Client client = clientList.search(clientId);
-        if (clientList.search(clientId) != null){
+        if (client!= null){
             if (client.getShow() == null || client.getShow().getShowEndDate().before(Calendar.getInstance()) ) {
-                clientList.removeClient(clientId);
-                return true;
+              return clientList.removeClient(client);
             }
+            System.out.println("Client has a booked show.");
+        }else {
+            System.out.println("There is no such client.");
         }
         return false;
-
-    }
-
-    public String clientList(){
-        return clientList.toString();
 
     }
 
@@ -66,73 +63,64 @@ public class Theater implements Serializable {
                             String phoneNumber, String cardNumber, String expDate){
         Customer customer = new Customer(name,address,phoneNumber);
         CreditCard card = new CreditCard(cardNumber,expDate, customer.getId());
-
-        if (!wallet.cardExist(card)){
-            card.setCustomersID(customer.getId());// setting the owner of the card
-            customer.addCard(card); // setting the card to the owner
-            customerList.insertCustomer(customer);
+        if (wallet.search(cardNumber) == null){
+            customer.addCard(card);
+            card.setCustomersID(customer.getId());
             wallet.addCard(card);
+            customerList.addCustomer(customer);
             return customer;
         }
-       return null;
+        return null;
+
     }
 
-    public boolean removeCustomer(String customerID) {
-        Customer customer = customerList.search(customerID);
-        if (customerList.search(customerID ) != null){
-            wallet.remove(customerID);
-            customerList.removeCustomer(customerID);
-            return true;
+    public boolean removeCustomer(Customer customer) {
+        if (customerList.search(customer.getId()) != null){
+            wallet.removeAssociatedCards(customer.getId());
+            return  customerList.removeCustomer(customer);
+
         }
         return false;
 
     }
 
-    public boolean addCreditCard(String customerID,String cardNumber, String expDate){
-        if (!wallet.cardUsed(cardNumber)){
-           Customer customer = customerList.search(customerID);
-           CreditCard card = new CreditCard(cardNumber,expDate,customerID);
-
-           customer.addCard(card);
-           card.setCustomersID(customerID);
-           wallet.addCard(card);
-           return true;
-        }
-        return false;
-
-    }
-
-    public boolean removeCreditCard(String cardNumber) {
+    public boolean addCreditCard(String customerID,String cardNumber, String expDate) {
         if (wallet.search(cardNumber) == null) {
-            System.out.println("Wallet is empty!");
+            Customer customer = customerList.search(customerID);
+            CreditCard card = new CreditCard(cardNumber, expDate, customerID);
+            customer.addCard(card);
+            card.setCustomersID(customerID);
+            wallet.addCard(card);
+            return true;
+        }else {
+            System.out.println("Credit card is already used!");
             return false;
         }
-        CreditCard card = wallet.search(cardNumber);
-        if (card != null) {
-            Customer customer = customerList.searchByCard(cardNumber);
+    }
 
-            if (customer.numOfCard() > 1) {
-                customer.removeCard(card);
-                wallet.removeCard(card);
-                return true;
-            }
 
-        }
-        return false;
+
+// Note done. check the availability of the date first.
+    public Show addShow(String showName, String clientID, String strDate, String endDate ){ // dd/mm/yyyy format
+            ShowTime showTime = new ShowTime(strDate,endDate);
+           Client client = clientList.search(clientID);
+           if ((client != null) && showTime.getStartDate().before(showTime.getEndDate())){
+               Show show = new Show(showName,showTime,client);
+               client.setShow(show);
+               show.setClient(client);
+               showCatalog.addShow(show);
+               return show;
+
+           }else {
+               return null;
+           }
     }
 
     public String listOfCustomers(){
         return customerList.toString();
     }
-
-// Note done. check the availability of the date first.
-    public Show addShow(String showName, String clientID, String strDate, String endDate ){ // dd/mm/yyyy format
-            Show show = new Show(showName, strDate,endDate);
-           Client client = clientList.search(clientID);
-           client.setShow(show);
-           show.setClient(client);
-           showCatalog.addShow(show);
-           return show;
+    public String clientList(){
+        return clientList.toString();
 
     }
 
@@ -206,13 +194,30 @@ public class Theater implements Serializable {
             e.printStackTrace();
         }
     }
-    /** String form of the library
-     *
-     */
-    @Override
-    public String toString() {
-        return customerList + "\n" +
-                clientList + "\n"+ showCatalog +"\n"+ wallet;
+
+
+
+    public boolean removeCreditCard(String credit_card_number) {
+        if (wallet.search(credit_card_number) == null) {
+            System.out.println("Wallet is empty!");
+            return false;
+        }
+        CreditCard card = wallet.search(credit_card_number);
+        if (card != null) {
+            Customer customer = customerList.search(card.getCustomersID());
+            if (customer.numOfCard() > 1) {
+                customer.removeCard(card);
+                wallet.removeCard(card);
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+
+    public Customer searchCustomer(String customer_id) {
+        return customerList.search(customer_id);
     }
 }
 

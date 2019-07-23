@@ -3,15 +3,15 @@ import java.util.Iterator;
 import java.io.Serializable;
 import java.util.*;
 
-public class Customer implements Serializable {
+public class Customer implements Serializable, Matchable<String> {
     private static final long serialVersionUID = 1L;
     private String name;
     private String address;
     private String phone;
     private String id;
     private static final String CUSTOMER_STRING = "CUSTOMER";
-    private List showsBooked = new LinkedList();
-    private List creditCards = new LinkedList();
+    private List<Show> showsBooked = new LinkedList<>();
+    private List<CreditCard> creditCards = new LinkedList<>();
    // private List transactions = new LinkedList();
     /**
      * Represents a single member d
@@ -31,15 +31,19 @@ public class Customer implements Serializable {
      * @return true iff the book could be marked as issued. always true currently
      */
     public boolean bookShow(Show show) {
-        if (showsBooked.add(show)) {
+        if (show != null) {
+            showsBooked.add(show);
             return true;
         }
         return false;
     }
 
     public boolean addCard(CreditCard card){
-        creditCards.add(card);
-        return  true;
+        if (card != null){
+            creditCards.add(card);
+            return true;
+        }
+        return  false;
     }
 
     public boolean removeCard(CreditCard card){
@@ -121,20 +125,8 @@ public class Customer implements Serializable {
     public void setName(String newName) {
         name = newName;
     }
-    /**
-     * Setter for address
-     * @param newAddress member's new address
-     */
-    public void setAddress(String newAddress) {
-        address = newAddress;
-    }
-    /**
-     * Setter for phone
-     * @param newPhone member's new phone
-     */
-    public void setPhone(String newPhone) {
-        phone = newPhone;
-    }
+
+
     /**
      * Checks whether the member is equal to the one with the given id
      * @param id of the member who should be compared
@@ -145,7 +137,13 @@ public class Customer implements Serializable {
     }
 
     public String toString(){
-        return "\nCustomer Name: "+ this.name +"\nAddress: "+ this.address+"\nPhone Number: "+ this.phone;
+        return "\nCustomer Name: "+ this.name +"\nAddress: "+
+                this.address+"\nPhone Number: "+ this.phone + "\nCustomer ID: " + this.id;
+    }
+
+    @Override
+    public boolean matches(String key) {
+        return this.id.equals(key);
     }
 
 }

@@ -8,11 +8,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ClientList implements Serializable {
+public class ClientList extends ItemList<Client,String> implements Serializable {
 
 
     private static final long serialVersionUID = 1L;
-    private List clientLinkedList = new LinkedList<Client>();
     private static ClientList clientList;
 
     /*
@@ -42,28 +41,17 @@ public class ClientList implements Serializable {
      * @return true iff the book exists
      */
     public Client search(String clientId) {
-        for (Iterator iterator = clientLinkedList.iterator(); iterator.hasNext(); ) {
-            Client client = (Client) iterator.next();
-            if (client.getId().equals(clientId)) {
-                return client;
-            }
-        }
-        return null;
+      return super.search(clientId);
     }
 
     /**
      * Removes a client from the catalog
      *
-     * @param ClientId client id
+     * @param client client id
      * @return true iff client could be removed
      */
-    public boolean removeClient(String ClientId) {
-        Client client = search(ClientId);
-        if (client == null) {
-            return false;
-        } else {
-            return clientLinkedList.remove(client);
-        }
+    public boolean removeClient(Client client) {
+      return super.remove(client);
     }
 
     /**
@@ -73,20 +61,9 @@ public class ClientList implements Serializable {
      * @return true iff the client could be inserted. Currently always true
      */
     public boolean addClient(Client client) {
-        clientLinkedList.add(client);
-        return true;
+
+        return super.add(client);
     }
-
-    /**
-     * Returns an iterator to all clients
-     *
-     * @return iterator to the collection
-     */
-    public Iterator getClients() {
-
-        return clientLinkedList.iterator();
-    }
-
     /*
      * Supports serialization
      * @param output the stream to be written to
@@ -127,7 +104,8 @@ public class ClientList implements Serializable {
      * String form of the collection
      */
     public String toString() {
-        return clientLinkedList.toString();
+
+        return super.toString();
     }
 }
 
