@@ -26,9 +26,12 @@ public class UserInterface {
     private static final int LIST_ALL_SHOWS = 10;
     private static final int SAVE = 11;
     private static final int RETRIEVE = 12;
-    private static final int HELP = 13;
-
-
+    private static final int REGULAR_TICKETS = 13;
+    private static final int ADVANCED_TICKET = 14;
+    private static final int STUDENT_TICKET = 15;
+    private static final int PAY_CLIENT = 16;
+    private static final int PRINT_TICKETS = 17;
+    private static final int HELP = 18;
     /**
      * Made private for singleton pattern.
      * Conditionally looks for any saved data. Otherwise, it gets
@@ -151,20 +154,27 @@ public class UserInterface {
      */
     public void help() {
         System.out.println("Enter a number between 0 and 12 as explained below:");
-        System.out.println(EXIT + " to Exit\n");
+        System.out.println(EXIT + " to Exit");
         System.out.println(ADD_CLIENT + " to add a client");
         System.out.println(ADD_CUSTOMER + " to  add customer");
         System.out.println(ADD_SHOW + " to add show");
-        System.out.println(ADD_CREDIT_CARD + " to add credit card");
         System.out.println(REMOVE_CLIENT + " to remove client ");
         System.out.println(REMOVE_CUSTOMER + " to  remove customer");
-        System.out.println(REMOVE_CREDIT_CARD + " to remove credit card");
         System.out.println(LIST_ALL_CLIENTS + " to list all clients");
+        System.out.println(ADD_CREDIT_CARD + " to add credit card");
+        System.out.println(REMOVE_CREDIT_CARD + " to remove credit card");
         System.out.println(LIST_ALL_CUSTOMERS + " to list all customers");
         System.out.println(LIST_ALL_SHOWS + " to list all shows");
         System.out.println(SAVE + " to  save data");
         System.out.println(RETRIEVE + " to  retrieve");
+        System.out.println(PRINT_TICKETS + " to print all tickets");
+        System.out.println(REGULAR_TICKETS + " to buy regular ticket");
+        System.out.println(ADVANCED_TICKET + " to buy advanced ticket");
+        System.out.println(STUDENT_TICKET + "  to buy student ticket");
+        System.out.println(PAY_CLIENT + " to pay client");
         System.out.println(HELP + " for help");
+
+
     }
 
     /**
@@ -216,9 +226,10 @@ public class UserInterface {
         String client_id = getToken("Enter client Id");
         String start_date = getToken("Enter start date: dd/mm/yyyy");
         String end_date = getToken("Enter end date: dd/mm/yyyy");
+        String ticketPrice = getToken("Enter show regular ticket price");
 
 
-        if (theater.addShow(name, client_id, start_date, end_date) != null) {
+        if (theater.addShow(name, client_id, start_date, end_date,Double.valueOf(ticketPrice)) != null) {
             System.out.println("Show added");
         }else {
             System.out.println("Could not add show. Client might not registered or invalid date");
@@ -281,6 +292,54 @@ public class UserInterface {
 
         System.out.println(theater.listOfShow());
     }
+
+    /**
+     * Regular ticket sale
+     */
+    public void regulTickets(){
+        String quantity = getToken("Enter quantity of ticks");
+        String customer_id = getToken("Enter customer Id");
+        String show_date = getToken("Enter show date: dd/mm/yyyy");
+        String show_name = getToken("Enter show name");
+        String card_number = getToken("Enter card number");
+        theater.regularTicket(Integer.valueOf(quantity),customer_id,card_number,show_name,show_date);
+    }
+
+    /**
+     * Advanced ticket sale
+     */
+    public void advancedTickets(){
+        String quantity = getToken("Enter quantity of ticks");
+        String customer_id = getToken("Enter customer Id");
+        String show_date = getToken("Enter show date: dd/mm/yyyy");
+        String show_name = getToken("Enter show name");
+        String card_number = getToken("Enter card number");
+        theater.advancedTicket(Integer.valueOf(quantity),customer_id,card_number,show_name,show_date);
+    }
+
+    /**
+     * Student ticket sale
+     */
+    public void studentTickets(){
+        String quantity = getToken("Enter quantity of ticks");
+        String customer_id = getToken("Enter customer Id");
+        String show_date = getToken("Enter show date: dd/mm/yyyy");
+        String show_name = getToken("Enter show name");
+        String card_number = getToken("Enter card number");
+        theater.studentAdvancedTicket(Integer.valueOf(quantity),customer_id,card_number,show_name,show_date);
+    }
+
+    public void payClient(){
+        String clientID = getToken("Enter client Id");
+        System.out.println("Client balance is: "+theater.getClientBalnce(clientID));
+        String amount = getToken("Enter amount to be paid");
+        theater.payClient(Double.valueOf(amount), clientID);
+    }
+    public void printTickets(){
+        theater.listOfTickets();
+    }
+
+
     /**
      * Method to be called for saving the Library object.
      * Uses the appropriate Library method for saving.
@@ -356,6 +415,21 @@ public class UserInterface {
                     break;
                 case RETRIEVE:
                     retrieve();
+                    break;
+                case REGULAR_TICKETS:
+                    regulTickets();
+                    break;
+                case ADVANCED_TICKET:
+                    advancedTickets();
+                    break;
+                case STUDENT_TICKET:
+                    studentTickets();
+                    break;
+                case PAY_CLIENT:
+                    payClient();
+                    break;
+                case PRINT_TICKETS:
+                    printTickets();
                     break;
                 case HELP:
                     help();

@@ -1,6 +1,8 @@
 package com.TheaterApp;
 import java.io.*;
 import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class Theater implements Serializable {
@@ -9,7 +11,9 @@ public class Theater implements Serializable {
     private ShowCatalog showCatalog;
     private ClientList clientList;
     private CustomerList customerList;
+    private List<Ticket> tickets = new LinkedList<>();
     private static Theater theater;
+    private double theaterBalance = 0.0;
 
     private Theater(){
         wallet = Wallet.instance();
@@ -27,6 +31,19 @@ public class Theater implements Serializable {
         }else{
            return theater;
         }
+    }
+
+    public double getClientBalnce(String clientId){
+       return clientList.search(clientId).getBalance();
+    }
+
+    public void payClient(double amount, String clientId){
+       Client client = clientList.search(clientId);
+       if (amount> client.getBalance()){
+           System.out.println("Amount is over balance");
+       }
+       client.setBalance(client.getBalance() - amount);
+
     }
 
     /**
@@ -101,11 +118,11 @@ public class Theater implements Serializable {
 
 
 // Note done. check the availability of the date first.
-    public Show addShow(String showName, String clientID, String strDate, String endDate ){ // dd/mm/yyyy format
+    public Show addShow(String showName, String clientID, String strDate, String endDate, double ticketPrice ){ // dd/mm/yyyy format
             ShowTime showTime = new ShowTime(strDate,endDate);
            Client client = clientList.search(clientID);
            if ((client != null) && showTime.getStartDate().before(showTime.getEndDate())){
-               Show show = new Show(showName,showTime,client);
+               Show show = new Show(showName,showTime,client,ticketPrice);
                client.setShow(show);
                show.setClient(client);
                showCatalog.addShow(show);
@@ -116,6 +133,69 @@ public class Theater implements Serializable {
            }
     }
 
+    public void regularTicket(int quantity, String customerId, String cardNumber,
+                                 String showName, String dateOfShow){
+        Customer customer = customerList.search(customerId);
+        Show show = showCatalog.search(showName);
+        if ( show != null && customer != null) {
+                for (int i = 0; i < quantity; i++) {
+                    Client client = show.getClient();
+                    Ticket regularTicket = new RegularTicket(show.getTicketPrice(), dateOfShow);
+                    tickets.add(regularTicket);
+                    customer.addTicket(regularTicket);
+                    client.addTicket(regularTicket);
+                    client.addBalance(show.getTicketPrice()/2);
+                    this.theaterBalance += show.getTicketPrice()/2;
+                }
+
+
+        }
+
+    }
+
+    public void advancedTicket(int quantity, String customerId, String cardNumber,
+                                  String showName, String dateOfShow){
+        Customer customer = customerList.search(customerId);
+        Show show = showCatalog.search(showName);
+        if ( show != null && customer != null) {
+            for (int i = 0; i < quantity; i++) {
+                Client client = show.getClient();
+                double price = show.getTicketPrice()* 7/10;
+                Ticket advancedTicket = new AdvancedTicket(price, dateOfShow);
+                    tickets.add(advancedTicket);
+                    customer.addTicket(advancedTicket);
+                    client.addTicket(advancedTicket);
+                    client.addBalance(show.getTicketPrice() / 2);
+                    this.theaterBalance += show.getTicketPrice() / 2;
+                }
+
+        }
+
+    }
+    public void studentAdvancedTicket(int quantity, String customerId, String cardNumber,
+                                  String showName, String dateOfShow){
+        Customer customer = customerList.search(customerId);
+        Show show = showCatalog.search(showName);
+        if ( show != null && customer != null) {
+            for (int i = 0; i < quantity; i++) {
+                Client client = show.getClient();
+                double price = show.getTicketPrice()* 14/10;
+                Ticket studentAdvanced = new AdvancedTicket(price, dateOfShow);
+                tickets.add(studentAdvanced);
+                customer.addTicket(studentAdvanced);
+                client.addTicket(studentAdvanced);
+                client.addBalance(show.getTicketPrice() / 2);
+                this.theaterBalance += show.getTicketPrice() / 2;
+            }
+            System.out.println("All "+ quantity +" students must show valid student id.”");
+
+        }
+
+    }
+
+    public String listOfTickets(){
+       return tickets.toString();
+    }
     public String listOfCustomers(){
         return customerList.toString();
     }

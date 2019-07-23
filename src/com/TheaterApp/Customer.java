@@ -12,6 +12,7 @@ public class Customer implements Serializable, Matchable<String> {
     private static final String CUSTOMER_STRING = "CUSTOMER";
     private List<Show> showsBooked = new LinkedList<>();
     private List<CreditCard> creditCards = new LinkedList<>();
+    private List<Ticket> tickets = new LinkedList<>();
    // private List transactions = new LinkedList();
     /**
      * Represents a single member d
@@ -133,6 +134,7 @@ public class Customer implements Serializable, Matchable<String> {
      * @return true iff the member ids match
      */
     public boolean equals(String id) {
+
         return this.id.equals(id);
     }
 
@@ -146,4 +148,7 @@ public class Customer implements Serializable, Matchable<String> {
         return this.id.equals(key);
     }
 
+    public void addTicket(Ticket regularTicket) {
+        tickets.add(regularTicket);
+    }
 }

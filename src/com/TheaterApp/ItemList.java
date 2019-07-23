@@ -44,6 +44,12 @@ public class ItemList<T extends Matchable<K>, K> implements Serializable {
 		return list.add(item);
 	}
 
+    /**
+     * Adds a ticket a collection
+     * @param ticket
+     * @return
+     */
+
 	/**
 	 * Removes the item from the list
 	 * 

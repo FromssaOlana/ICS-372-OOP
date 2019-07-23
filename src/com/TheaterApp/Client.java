@@ -12,7 +12,7 @@ public class Client implements Serializable, Matchable<String> {
     private double balance;
     private String phoneNumber;
     private static final String CLIENT_STRING = "CLIENT";
-    private List creditCards = new LinkedList();
+    private List<Ticket> soldTickets = new LinkedList<>();
 
     public double getBalance() {
         return balance;
@@ -20,6 +20,10 @@ public class Client implements Serializable, Matchable<String> {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public void addBalance(double balance) {
+        this.balance += balance;
     }
 
     public Client(String name, String address, String phoneNumber) {
@@ -30,26 +34,9 @@ public class Client implements Serializable, Matchable<String> {
         this.id = CLIENT_STRING + ClientIdServer.instance().getId();
     }
 
-    public void setName(String name) {
-
-        this.name = name;
-    }
-
     public String getName() {
-
         return name;
     }
-
-    public void setAddress(String address) {
-
-        this.address = address;
-    }
-
-    public String getAddress() {
-
-        return address;
-    }
-
     public Show getShow() {
         return show;
     }
@@ -58,19 +45,25 @@ public class Client implements Serializable, Matchable<String> {
         this.show = show;
     }
 
-    public String getId() {
-
-        return id;
+    public boolean addTicket(Ticket ticket){
+        return soldTickets.add(ticket);
     }
 
     public boolean equals(String id) {
 
         return this.id.equals(id);
     }
-    public String toString(){
-        return "\nName: "+ this.name + "\nAddress: " + this.address+ "\nClient ID: "+ this.id+"\n";
-    }
 
+    @Override
+    public String toString() {
+        return
+                "name='" + name + '\'' +
+                "\n Address='" + address + '\'' +
+                "\n Show=" + show +
+                "\n Id='" + id + '\'' +
+                "\n Balance=" + balance +
+                "\n PhoneNumber='" + phoneNumber;
+    }
 
     @Override
     public boolean matches(String key) {

@@ -7,16 +7,23 @@ public class Show implements Matchable<String>, Comparable {
     private String showName;
     private ShowTime showTime;
     private Client client;
-    private List bookedCustumersList = new LinkedList<Customer>();
+    private double ticketPrice;
+    private List bookedCostumersList = new LinkedList<Customer>();
 
-    public Show(String showName, ShowTime showTime, Client client) {
+    public Show(String showName, ShowTime showTime, Client client, double ticketPrice) {
         this.showName = showName;
         this.showTime = showTime;
         this.client = client;
+        this.ticketPrice = ticketPrice;
     }
 
     public String getShowName() {
+
         return showName;
+    }
+
+    public double getTicketPrice() {
+        return ticketPrice;
     }
     public Client getClient(){
 
@@ -37,7 +44,7 @@ public class Show implements Matchable<String>, Comparable {
     }
 
     public boolean removeCustomer(Customer customer) {
-        if (bookedCustumersList.remove(customer)) {
+        if (bookedCostumersList.remove(customer)) {
             return true;
         }
         return false;
