@@ -10,7 +10,6 @@ public class Customer implements Serializable, Matchable<String> {
     private String phone;
     private String id;
     private static final String CUSTOMER_STRING = "CUSTOMER";
-    private List<Show> showsBooked = new LinkedList<>();
     private List<CreditCard> creditCards = new LinkedList<>();
     private List<Ticket> tickets = new LinkedList<>();
    // private List transactions = new LinkedList();
@@ -26,19 +25,6 @@ public class Customer implements Serializable, Matchable<String> {
         this.phone = phone;
         id = CUSTOMER_STRING + (CustomerIdServer.instance()).getId();
     }
-    /**
-     * Stores the book as issued to the member
-     * @param show the book to be issued
-     * @return true iff the book could be marked as issued. always true currently
-     */
-    public boolean bookShow(Show show) {
-        if (show != null) {
-            showsBooked.add(show);
-            return true;
-        }
-        return false;
-    }
-
     public boolean addCard(CreditCard card){
         if (card != null){
             creditCards.add(card);
@@ -68,29 +54,6 @@ public class Customer implements Serializable, Matchable<String> {
         }
         return false;
     }
-
-    /**
-     *
-     * @param show
-     * @return
-     */
-    public boolean cancelShow(Show show) {
-       int index = showsBooked.indexOf(show);
-       Show show1 = (Show) showsBooked.get(index);
-        if ( showsBooked.remove(show) && show1.removeCustomer(this)){
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Gets an iterator to the shows that is booked
-     * @return Iterator to the collection of issued books
-     */
-    public Iterator getBookedShows() {
-        return (showsBooked.listIterator());
-    }
-
     /**
      * Getter for name
      * @return member name
@@ -138,9 +101,22 @@ public class Customer implements Serializable, Matchable<String> {
         return this.id.equals(id);
     }
 
-    public String toString(){
-        return "\nCustomer Name: "+ this.name +"\nAddress: "+
-                this.address+"\nPhone Number: "+ this.phone + "\nCustomer ID: " + this.id;
+    public String print(){
+        return "Customer" +
+                " name: " + name +
+                "\naddress: " + address +
+                "\nphone: " + phone +
+                "\nId: " + id;
+    }
+    @Override
+    public String toString() {
+        return "Customer" +
+               " name: " + name +
+                "\nAddress: " + address +
+                "\nPhone: " + phone +
+                "\nId: " + id +
+                "\nCreditCards: " + creditCards +
+                "\nTickets: " + tickets +"\n";
     }
 
     @Override

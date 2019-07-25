@@ -1,11 +1,11 @@
 package com.TheaterApp;
 
-public class AdvancedTicket extends Ticket{
+public class StudentTicket extends Ticket {
     private static final long serialVersionUID = 1L;
 
-    public AdvancedTicket(double Price, String dateOfShow) {
+    public StudentTicket(double Price, String dateOfShow) {
         super(Price, dateOfShow);
-        super.setTypOfTicket("Advanced Ticket");
+        super.setTypOfTicket("Student Ticket");
     }
 
     @Override

@@ -3,9 +3,11 @@ package com.TheaterApp;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Random;
 
-public class TicketBarCodeServer {
+public class TicketBarCodeServer implements Serializable {
+    private static final long serialVersionUID = 1L;
     private  int barCode;
     private static TicketBarCodeServer server;
     /*

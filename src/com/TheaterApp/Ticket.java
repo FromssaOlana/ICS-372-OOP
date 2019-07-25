@@ -1,10 +1,13 @@
 package com.TheaterApp;
 
-public abstract class Ticket {
+import java.io.Serializable;
+
+public abstract class Ticket implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String barCode;
     private double ticketPrice;
     private String dateOfShow;
-    protected String TypeOfTicket = null;
+    private String TypeOfTicket = null;
 
     public Ticket(double regularPrice, String dateOfShow) {
         this.barCode = Integer.toString(TicketBarCodeServer.instance().getBarCode());
@@ -13,15 +16,16 @@ public abstract class Ticket {
     }
 
     public void setTypOfTicket(String typeOfTicket){
+
         this.TypeOfTicket = typeOfTicket;
     }
 
     @Override
     public String toString() {
         return "Ticket" +
-                "\n barCode='" + barCode +
-                "\n ticketPrice=" + ticketPrice +
-                "\n dateOfShow='" + dateOfShow +
-                "\n TypOfTicket='" + TypeOfTicket ;
+                " barCode: " + barCode +
+                ",  ticketPrice: " + ticketPrice +
+                ",  dateOfShow: " + dateOfShow +
+                ",  TypOfTicket: " + TypeOfTicket +"\n";
     }
 }

@@ -1,6 +1,7 @@
 package com.TheaterApp;
 import java.io.*;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class Theater implements Serializable {
             // instantiating all singletons
             CustomerIdServer.instance();
             ClientIdServer.instance();
+            TicketBarCodeServer.instance();
             return theater = new Theater();
         }else{
            return theater;
@@ -34,16 +36,22 @@ public class Theater implements Serializable {
     }
 
     public double getClientBalnce(String clientId){
-       return clientList.search(clientId).getBalance();
+        Client client = clientList.search(clientId);
+        if (client != null){
+            return client.getBalance();
+        }
+        System.out.println("Could not find client. ");
+        return -1;
     }
 
     public void payClient(double amount, String clientId){
        Client client = clientList.search(clientId);
        if (amount> client.getBalance()){
            System.out.println("Amount is over balance");
+       }else {
+           client.setBalance(client.getBalance() - amount);
+           System.out.println("$"+amount+" paid to client. ");
        }
-       client.setBalance(client.getBalance() - amount);
-
     }
 
     /**
@@ -68,7 +76,7 @@ public class Theater implements Serializable {
             if (client.getShow() == null || client.getShow().getShowEndDate().before(Calendar.getInstance()) ) {
               return clientList.removeClient(client);
             }
-            System.out.println("Client has a booked show.");
+            System.out.println("CAN NOT REMOVE. Client has a booked show.");
         }else {
             System.out.println("There is no such client.");
         }
@@ -85,8 +93,10 @@ public class Theater implements Serializable {
             card.setCustomersID(customer.getId());
             wallet.addCard(card);
             customerList.addCustomer(customer);
+            System.out.println("New customer added.");
             return customer;
         }
+        System.out.println("Customer could not be added. Card might be used already.");
         return null;
 
     }
@@ -94,9 +104,11 @@ public class Theater implements Serializable {
     public boolean removeCustomer(Customer customer) {
         if (customerList.search(customer.getId()) != null){
             wallet.removeAssociatedCards(customer.getId());
-            return  customerList.removeCustomer(customer);
-
+            boolean b = customerList.removeCustomer(customer);
+            System.out.println("Customer removed");
+            return b;
         }
+        System.out.println("Could not remove customer");
         return false;
 
     }
@@ -116,77 +128,94 @@ public class Theater implements Serializable {
     }
 
 
+    public Show addShow(String showName, String clientID, String strDate, String endDate, double ticketPrice) { // dd/mm/yyyy format
+        ShowTime showTime = new ShowTime(strDate, endDate);
+        Client client = clientList.search(clientID);
+        if ((client != null) && showTime != null) {
 
-// Note done. check the availability of the date first.
-    public Show addShow(String showName, String clientID, String strDate, String endDate, double ticketPrice ){ // dd/mm/yyyy format
-            ShowTime showTime = new ShowTime(strDate,endDate);
-           Client client = clientList.search(clientID);
-           if ((client != null) && showTime.getStartDate().before(showTime.getEndDate())){
-               Show show = new Show(showName,showTime,client,ticketPrice);
-               client.setShow(show);
-               show.setClient(client);
-               showCatalog.addShow(show);
-               return show;
+            if (showTime.getStartDate().before(showTime.getEndDate()) && showTime.getStartDate().after(Calendar.getInstance())) {
+                Show show = new Show(showName, showTime, client, ticketPrice);
+                client.setShow(show);
+                show.setClient(client);
+               if(showCatalog.addShow(show)){
+                   return show;
+               }
 
-           }else {
-               return null;
-           }
+            }
+
+        }
+
+        return null;
     }
 
-    public void regularTicket(int quantity, String customerId, String cardNumber,
-                                 String showName, String dateOfShow){
+    public void regularTicket(int quantity, String customerId, String cardNumber, String showDate){
+
+        String[] stringArray = showDate.split("/");
+        Calendar date = new GregorianCalendar(Integer.valueOf(stringArray[2]),
+                Integer.valueOf(stringArray[1]),Integer.valueOf(stringArray[0]));
         Customer customer = customerList.search(customerId);
-        Show show = showCatalog.search(showName);
+        Show show = showCatalog.search(date);
         if ( show != null && customer != null) {
                 for (int i = 0; i < quantity; i++) {
                     Client client = show.getClient();
-                    Ticket regularTicket = new RegularTicket(show.getTicketPrice(), dateOfShow);
+                    Ticket regularTicket = new RegularTicket(show.getTicketPrice(), showDate);
                     tickets.add(regularTicket);
                     customer.addTicket(regularTicket);
                     client.addTicket(regularTicket);
                     client.addBalance(show.getTicketPrice()/2);
                     this.theaterBalance += show.getTicketPrice()/2;
                 }
+            System.out.println(quantity +" Tickets have purchased");
 
 
+        }else {
+            System.out.println("Error: Either no show on that day or couldn't find customer");
         }
-
     }
 
-    public void advancedTicket(int quantity, String customerId, String cardNumber,
-                                  String showName, String dateOfShow){
+    public void advancedTicket(int quantity, String customerId, String cardNumber, String showDate){
+        String[] stringArray = showDate.split("/");
+        Calendar date = new GregorianCalendar(Integer.valueOf(stringArray[2]),
+                Integer.valueOf(stringArray[1]),Integer.valueOf(stringArray[0]));
         Customer customer = customerList.search(customerId);
-        Show show = showCatalog.search(showName);
+        Show show = showCatalog.search(date);
         if ( show != null && customer != null) {
             for (int i = 0; i < quantity; i++) {
                 Client client = show.getClient();
                 double price = show.getTicketPrice()* 7/10;
-                Ticket advancedTicket = new AdvancedTicket(price, dateOfShow);
-                    tickets.add(advancedTicket);
-                    customer.addTicket(advancedTicket);
-                    client.addTicket(advancedTicket);
-                    client.addBalance(show.getTicketPrice() / 2);
-                    this.theaterBalance += show.getTicketPrice() / 2;
-                }
+                Ticket advancedTicket = new AdvancedTicket(price, showDate);
+                tickets.add(advancedTicket);
+                customer.addTicket(advancedTicket);
+                client.addTicket(advancedTicket);
+                client.addBalance(price/2);
+                this.theaterBalance += price/2;
+            }
+            System.out.println(quantity +" Tickets have purchased");
 
+
+        }else {
+            System.out.println("Error: Either no show on that day or couldn't find customer");
         }
 
     }
-    public void studentAdvancedTicket(int quantity, String customerId, String cardNumber,
-                                  String showName, String dateOfShow){
+    public void studentAdvancedTicket(int quantity, String customerId, String cardNumber, String dateOfShow){
+        String[] stringArray = dateOfShow.split("/");
+        Calendar date = new GregorianCalendar(Integer.valueOf(stringArray[2]),
+                Integer.valueOf(stringArray[1]),Integer.valueOf(stringArray[0]));
         Customer customer = customerList.search(customerId);
-        Show show = showCatalog.search(showName);
+        Show show = showCatalog.search(date);
         if ( show != null && customer != null) {
             for (int i = 0; i < quantity; i++) {
                 Client client = show.getClient();
-                double price = show.getTicketPrice()* 14/10;
-                Ticket studentAdvanced = new AdvancedTicket(price, dateOfShow);
-                tickets.add(studentAdvanced);
-                customer.addTicket(studentAdvanced);
-                client.addTicket(studentAdvanced);
-                client.addBalance(show.getTicketPrice() / 2);
-                this.theaterBalance += show.getTicketPrice() / 2;
+                double price = show.getTicketPrice()* 7/20;
+                Ticket studentTicket = new StudentTicket(price, dateOfShow);
+                tickets.add(studentTicket);
+                customer.addTicket(studentTicket);
+                client.addTicket(studentTicket);
+                client.addBalance(price/2);
+                this.theaterBalance += price/2;
             }
+            System.out.println(quantity +" Tickets have purchased");
             System.out.println("All "+ quantity +" students must show valid student id.”");
 
         }
@@ -214,13 +243,14 @@ public class Theater implements Serializable {
             FileInputStream file = new FileInputStream("TheaterData");
             ObjectInputStream input = new ObjectInputStream(file);
             input.readObject();
-            //CustomerIdServer.retrieve(input);
+            CustomerIdServer.retrieve(input);
             ClientIdServer.retrieve(input);
+            TicketBarCodeServer.retrieve(input);
             return theater;
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             ioe.printStackTrace();
             return null;
-        } catch(ClassNotFoundException cnfe) {
+        } catch (ClassNotFoundException cnfe) {
             cnfe.printStackTrace();
             return null;
         }
@@ -232,12 +262,14 @@ public class Theater implements Serializable {
      * @return true iff the data could be saved
      */
     public static  boolean save() {
+        ObjectOutputStream output;
         try {
             FileOutputStream file = new FileOutputStream("TheaterData");
-            ObjectOutputStream output = new ObjectOutputStream(file);
+            output  = new ObjectOutputStream(file);
             output.writeObject(theater);
-           output.writeObject(CustomerIdServer.instance());
+            output.writeObject(CustomerIdServer.instance());
             output.writeObject(ClientIdServer.instance());
+            output.writeObject(TicketBarCodeServer.instance());
             return true;
         } catch(IOException ioe) {
             ioe.printStackTrace();
@@ -260,18 +292,13 @@ public class Theater implements Serializable {
      * Reads the object from a given stream
      * @param input the stream to be read
      */
-    private void readObject(ObjectInputStream input) {
-        try {
-            input.defaultReadObject();
-            if (theater == null) {
-                theater = (Theater) input.readObject();
-            } else {
-                input.readObject();
-            }
-        } catch(IOException ioe) {
-            ioe.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
+    private void readObject(ObjectInputStream input)
+            throws IOException, ClassNotFoundException {
+        input.defaultReadObject();
+        if (theater == null) {
+            theater = (Theater) input.readObject();
+        } else {
+            input.readObject();
         }
     }
 
@@ -288,8 +315,12 @@ public class Theater implements Serializable {
             if (customer.numOfCard() > 1) {
                 customer.removeCard(card);
                 wallet.removeCard(card);
+                System.out.println("Credit card removed");
                 return true;
+            }else{
+                System.out.println("Could not remove credit card. customer has 1 card. ");
             }
+
 
         }
         return false;

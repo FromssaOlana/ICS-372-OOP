@@ -1,10 +1,13 @@
 package com.TheaterApp;
 
-public class RegularTicket extends Ticket {
+import java.io.Serializable;
 
+public class RegularTicket extends Ticket implements Serializable {
+    private static final long serialVersionUID = 1L;
     public RegularTicket(double Price, String dateOfShow) {
+
         super(Price,dateOfShow);
-        super.TypeOfTicket = "Regular Ticket";
+        super.setTypOfTicket("Regular Ticket");
 
     }
 

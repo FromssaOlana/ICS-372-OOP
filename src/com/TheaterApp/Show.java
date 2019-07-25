@@ -1,9 +1,11 @@
 package com.TheaterApp;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.List;
 
-public class Show implements Matchable<String>, Comparable {
+public class Show implements Matchable<String>, Comparable, Serializable {
+    private static final long serialVersionUID = 1L;
     private String showName;
     private ShowTime showTime;
     private Client client;

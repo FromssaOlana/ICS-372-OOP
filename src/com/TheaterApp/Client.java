@@ -57,12 +57,12 @@ public class Client implements Serializable, Matchable<String> {
     @Override
     public String toString() {
         return
-                "name='" + name + '\'' +
-                "\n Address='" + address + '\'' +
-                "\n Show=" + show +
-                "\n Id='" + id + '\'' +
-                "\n Balance=" + balance +
-                "\n PhoneNumber='" + phoneNumber;
+                "Client name: " + name +
+                "\nAddress: " + address +
+                "\nShow: " + show +
+                "Id: " + id  +
+                "\nBalance: " + balance +
+                "\nPhoneNumber: " + phoneNumber+"\n";
     }
 
     @Override

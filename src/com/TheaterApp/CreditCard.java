@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
  public class CreditCard implements Serializable, Matchable<String> {
+     private static final long serialVersionUID = 1L;
     private String cardNumber;
     private String expDate;
     private String customersID;
@@ -61,6 +62,6 @@ import java.util.Objects;
      }
 
     public String toString() {
-        return "[ "+ " Card Number: " + cardNumber +"\nExp Date: "+ expDate +" ]";
+        return "Card Number: " + cardNumber + "  Exp Date: " + expDate;
     }
 }

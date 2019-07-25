@@ -5,6 +5,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 public class ClientIdServer implements Serializable {
+    private static final long serialVersionUID = 1L;
     private  int idCounter;
     private static ClientIdServer server;
     /*

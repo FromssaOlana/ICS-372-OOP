@@ -209,10 +209,7 @@ public class UserInterface {
             String exp_date = getToken("Enter exp date");
             result = theater.addCustomer(name, address, phone_number, card_number, exp_date);
             if (result != null) {
-                System.out.println(result);
-                System.out.println("New Customer added");
-            } else {
-                System.out.println("Customer could not be added. Card might be used already.");
+                System.out.println(result.print());
             }
             if (!yesOrNo("Add more customer?")) {
                 break;
@@ -229,8 +226,8 @@ public class UserInterface {
         String ticketPrice = getToken("Enter show regular ticket price");
 
 
-        if (theater.addShow(name, client_id, start_date, end_date,Double.valueOf(ticketPrice)) != null) {
-            System.out.println("Show added");
+        if (theater.addShow(name, client_id, start_date, end_date,Double.valueOf(ticketPrice)) != null){
+            System.out.println(name +" Show added");
         }else {
             System.out.println("Could not add show. Client might not registered or invalid date");
         }
@@ -251,32 +248,20 @@ public class UserInterface {
 
     public void removeClient() {
         String client_id = getToken("Enter client Id");
-        if (!theater.removeClient(client_id)) {
-            System.out.println("Could not remove client");
-        }
-        System.out.println("Client removed ");
+        theater.removeClient(client_id);
+
     }
 
     public void removeCustomer() {
         String customer_id = getToken("Enter customer Id");
         Customer customer = theater.searchCustomer(customer_id);
-        boolean result;
-        result = theater.removeCustomer(customer);
-        if (!result) {
-            System.out.println("Could not remove customer");
-        }
-        System.out.println("Customer removed");
+        theater.removeCustomer(customer);
+
     }
 
     public void removeCreditCard() {
         String credit_card_number = getToken("Enter credit card number");
-        boolean result;
-        result = theater.removeCreditCard(credit_card_number);
-        if (!result) {
-            System.out.println("Could not remove credit card");
-        }else {
-            System.out.println("Credit card removed");
-        }
+        theater.removeCreditCard(credit_card_number);
     }
 
     public void listAllClients(){
@@ -286,11 +271,16 @@ public class UserInterface {
 
     public void listAllCustomers()
     {
+
         System.out.println(theater.listOfCustomers());
     }
     public void listAllShows(){
 
         System.out.println(theater.listOfShow());
+    }
+
+    public void printTickets(){
+       System.out.println(theater.listOfTickets());
     }
 
     /**
@@ -300,9 +290,8 @@ public class UserInterface {
         String quantity = getToken("Enter quantity of ticks");
         String customer_id = getToken("Enter customer Id");
         String show_date = getToken("Enter show date: dd/mm/yyyy");
-        String show_name = getToken("Enter show name");
         String card_number = getToken("Enter card number");
-        theater.regularTicket(Integer.valueOf(quantity),customer_id,card_number,show_name,show_date);
+        theater.regularTicket(Integer.valueOf(quantity),customer_id,card_number,show_date);
     }
 
     /**
@@ -312,9 +301,8 @@ public class UserInterface {
         String quantity = getToken("Enter quantity of ticks");
         String customer_id = getToken("Enter customer Id");
         String show_date = getToken("Enter show date: dd/mm/yyyy");
-        String show_name = getToken("Enter show name");
         String card_number = getToken("Enter card number");
-        theater.advancedTicket(Integer.valueOf(quantity),customer_id,card_number,show_name,show_date);
+        theater.advancedTicket(Integer.valueOf(quantity),customer_id,card_number,show_date);
     }
 
     /**
@@ -324,19 +312,14 @@ public class UserInterface {
         String quantity = getToken("Enter quantity of ticks");
         String customer_id = getToken("Enter customer Id");
         String show_date = getToken("Enter show date: dd/mm/yyyy");
-        String show_name = getToken("Enter show name");
         String card_number = getToken("Enter card number");
-        theater.studentAdvancedTicket(Integer.valueOf(quantity),customer_id,card_number,show_name,show_date);
+        theater.studentAdvancedTicket(Integer.valueOf(quantity),customer_id,card_number,show_date);
     }
-
     public void payClient(){
         String clientID = getToken("Enter client Id");
         System.out.println("Client balance is: "+theater.getClientBalnce(clientID));
         String amount = getToken("Enter amount to be paid");
         theater.payClient(Double.valueOf(amount), clientID);
-    }
-    public void printTickets(){
-        theater.listOfTickets();
     }
 
 

@@ -4,13 +4,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 
 public class ShowCatalog extends ItemList<Show, String> implements Serializable {
-
-
     private static final long serialVersionUID = 1L;
     private static ShowCatalog showCatalog;
 
@@ -27,7 +25,7 @@ public class ShowCatalog extends ItemList<Show, String> implements Serializable 
      * @return the singleton object
      */
     public static ShowCatalog instance() {
-        if ( showCatalog == null) {
+        if (showCatalog == null) {
             return (showCatalog = new ShowCatalog());
         } else {
             return showCatalog;
@@ -41,17 +39,7 @@ public class ShowCatalog extends ItemList<Show, String> implements Serializable 
      * @return true iff the book exists
      */
     public Show search(String showName) {
-      return super.search(showName);
-    }
-
-    /**
-     * Removes a client from the catalog
-     *
-     * @param show client id
-     * @return true iff client could be removed
-     */
-    public boolean removeShow(Show show) {
-        return super.remove(show);
+        return super.search(showName);
     }
 
     /**
@@ -61,12 +49,46 @@ public class ShowCatalog extends ItemList<Show, String> implements Serializable 
      * @return true iff the client could be inserted. Currently always true
      */
     public boolean addShow(Show show) {
-       return super.add(show);
-
+        if (isDateAvailable(show)) {
+            return super.add(show);
+        }
+        System.out.println("Show date is already booked by other play. ");
+        return false;
     }
-    /// NOT done yet!
-    private boolean isOpen(Show show){
-      return false;
+
+    /**
+     * Checks if the requested date ia available to add the show
+     * @param show
+     * @return
+     */
+    private boolean isDateAvailable(Show show) {
+       List<Show> list = super.getList();
+       Show[] array = list.toArray( new Show[list.size()]);
+       if (list.size() == 0){
+           return true;
+       }
+        if ((show.getShowEndDate().before(array[0].getShowStartDate()) ||
+                (show.getShowStartDate().after(array[array.length - 1].getShowEndDate())))) {
+            return true;
+        }
+        for (int i = 1; i < array.length; i++) {
+            if (show.getShowStartDate().after(array[i - 1].getShowEndDate()) &&
+                    show.getShowEndDate().before(array[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public Show search(Calendar showDate){
+        List<Show> list = super.getList();
+        for (Iterator<Show> iterator = list.iterator(); iterator.hasNext();){
+            Show show = iterator.next();
+            if (showDate.after(show.getShowStartDate()) &&
+                    showDate.before(show.getShowEndDate())){
+                    return show;
+            }
+        }
+        return null;
     }
 
 
@@ -89,7 +111,7 @@ public class ShowCatalog extends ItemList<Show, String> implements Serializable 
      */
     private void readObject(ObjectInputStream input) {
         try {
-            if (showCatalog!= null) {
+            if (showCatalog != null) {
                 return;
             } else {
                 input.defaultReadObject();
