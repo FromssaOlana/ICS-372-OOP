@@ -2,6 +2,10 @@ package com.TheaterApp;
 
 import java.io.Serializable;
 
+/**
+ * An abstract class to be extended by all three ticket types.
+ */
+
 public abstract class Ticket implements Serializable {
     private static final long serialVersionUID = 1L;
     private String barCode;

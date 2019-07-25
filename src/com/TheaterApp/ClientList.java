@@ -1,13 +1,13 @@
 package com.TheaterApp;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 
+/**
+ * Author Fromssa Olana
+ * A client Collection class that hold an object of client.
+ */
 public class ClientList extends ItemList<Client,String> implements Serializable {
 
 

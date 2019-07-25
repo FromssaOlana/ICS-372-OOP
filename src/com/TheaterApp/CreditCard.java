@@ -1,45 +1,34 @@
 package com.TheaterApp;
-
 import java.io.Serializable;
 import java.util.Objects;
 
- public class CreditCard implements Serializable, Matchable<String> {
-     private static final long serialVersionUID = 1L;
+/**
+ * Author Fromssa Olana
+ * A credit Card class. It will hold full card futures.
+ */
+public class CreditCard implements Serializable, Matchable<String> {
+    private static final long serialVersionUID = 1L;
     private String cardNumber;
     private String expDate;
     private String customersID;
 
-    public CreditCard(String cardNumber, String expDate, String customersID){
+    CreditCard(String cardNumber, String expDate, String customersID) {
         this.cardNumber = cardNumber;
         this.expDate = expDate;
         this.customersID = customersID;
     }
 
-    public String getCardNumber() {
+    String getCardNumber() {
 
         return cardNumber;
     }
 
-    public void setCardNumber(String cardNumber) {
-
-        this.cardNumber = cardNumber;
-    }
-
-    public String getExpDate() {
-
-        return expDate;
-    }
-
-    public void setExpDate(String expDate) {
-        this.expDate = expDate;
-    }
-
-    public String getCustomersID() {
+    String getCustomersID() {
 
         return customersID;
     }
 
-    public void setCustomersID(String customersID) {
+    void setCustomersID(String customersID) {
 
         this.customersID = customersID;
     }
@@ -56,10 +45,11 @@ import java.util.Objects;
     public int hashCode() {
         return Objects.hash(cardNumber);
     }
-     @Override
-     public boolean matches(String cardNumber) {
-         return this.cardNumber.equals(cardNumber);
-     }
+
+    @Override
+    public boolean matches(String cardNumber) {
+        return this.cardNumber.equals(cardNumber);
+    }
 
     public String toString() {
         return "Card Number: " + cardNumber + "  Exp Date: " + expDate;

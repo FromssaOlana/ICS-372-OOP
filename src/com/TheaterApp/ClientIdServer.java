@@ -1,13 +1,20 @@
 package com.TheaterApp;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+/**
+ * Author Fromssa Olana
+ * A client Id Server class will generate an id for each call to a client class.
+ */
+
 public class ClientIdServer implements Serializable {
     private static final long serialVersionUID = 1L;
-    private  int idCounter;
+    private int idCounter;
     private static ClientIdServer server;
+
     /*
      * Private constructor for singleton pattern
      *
@@ -15,6 +22,7 @@ public class ClientIdServer implements Serializable {
     private ClientIdServer() {
         idCounter = 1;
     }
+
     /**
      * Supports the singleton pattern
      *
@@ -27,35 +35,39 @@ public class ClientIdServer implements Serializable {
             return server;
         }
     }
+
     /**
      * Getter for id
+     *
      * @return id of the client
      */
     public int getId() {
         return idCounter++;
     }
+
     /**
      * String form of the collection
-     *
      */
     @Override
     public String toString() {
         return ("IdServer" + idCounter);
     }
+
     /**
      * Retrieves the server object
      *
      * @param input inputstream for deserialization
      */
-    public static void retrieve(ObjectInputStream input) {
+    static void retrieve(ObjectInputStream input) {
         try {
             server = (ClientIdServer) input.readObject();
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             ioe.printStackTrace();
-        } catch(Exception cnfe) {
+        } catch (Exception cnfe) {
             cnfe.printStackTrace();
         }
     }
+
     /*
      * Supports serialization
      * @param output the stream to be written to
@@ -64,10 +76,11 @@ public class ClientIdServer implements Serializable {
         try {
             output.defaultWriteObject();
             output.writeObject(server);
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             ioe.printStackTrace();
         }
     }
+
     /*
      * Supports serialization
      * @param input the stream to be read from
@@ -80,7 +93,7 @@ public class ClientIdServer implements Serializable {
             } else {
                 input.readObject();
             }
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             ioe.printStackTrace();
         }
     }

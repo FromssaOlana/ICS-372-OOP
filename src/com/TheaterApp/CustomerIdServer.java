@@ -5,6 +5,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+/**
+ * Author Fromssa Olana
+ * Customer Id Server class will generate an ID for a customer object.
+ */
+
 public class CustomerIdServer  implements Serializable {
     private static final long serialVersionUID = 1L;
     private  int idCounter;

@@ -1,9 +1,13 @@
 package com.TheaterApp;
 
+/**
+ * Author Fromssa Olana
+ * An Advanced Ticket class.
+ */
 public class AdvancedTicket extends Ticket{
     private static final long serialVersionUID = 1L;
 
-    public AdvancedTicket(double Price, String dateOfShow) {
+   AdvancedTicket(double Price, String dateOfShow) {
         super(Price, dateOfShow);
         super.setTypOfTicket("Advanced Ticket");
     }

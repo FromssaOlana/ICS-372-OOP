@@ -317,7 +317,7 @@ public class UserInterface {
     }
     public void payClient(){
         String clientID = getToken("Enter client Id");
-        System.out.println("Client balance is: "+theater.getClientBalnce(clientID));
+        System.out.println("Client balance is: "+theater.getClientBalance(clientID));
         String amount = getToken("Enter amount to be paid");
         theater.payClient(Double.valueOf(amount), clientID);
     }

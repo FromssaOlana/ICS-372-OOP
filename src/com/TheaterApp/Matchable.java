@@ -1,7 +1,8 @@
 package com.TheaterApp;
 
 /**
- *
+ *Author Fromssa Olana
+ * An interface class that will implemented by some classes.
  * @param <K> key Type
  */
 public interface Matchable<K> {

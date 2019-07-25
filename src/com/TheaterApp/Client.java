@@ -1,8 +1,13 @@
 package com.TheaterApp;
+
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Author Fromssa Olana
+ * A client class
+ */
 public class Client implements Serializable, Matchable<String> {
     private static final long serialVersionUID = 1L;
     private String name;
@@ -14,19 +19,13 @@ public class Client implements Serializable, Matchable<String> {
     private static final String CLIENT_STRING = "CLIENT";
     private List<Ticket> soldTickets = new LinkedList<>();
 
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
-
-    public void addBalance(double balance) {
-        this.balance += balance;
-    }
-
-    public Client(String name, String address, String phoneNumber) {
+    /**
+     * A client constructor
+     * @param name
+     * @param address
+     * @param phoneNumber
+     */
+    Client(String name, String address, String phoneNumber) {
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
@@ -34,35 +33,43 @@ public class Client implements Serializable, Matchable<String> {
         this.id = CLIENT_STRING + ClientIdServer.instance().getId();
     }
 
-    public String getName() {
+    double getBalance() {
+        return balance;
+    }
+
+    void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    void addBalance(double balance) {
+        this.balance += balance;
+    }
+
+    String getName() {
         return name;
     }
-    public Show getShow() {
+
+    Show getShow() {
         return show;
     }
 
-    public void setShow(Show show) {
+    void setShow(Show show) {
         this.show = show;
     }
 
-    public boolean addTicket(Ticket ticket){
+    boolean addTicket(Ticket ticket) {
         return soldTickets.add(ticket);
-    }
-
-    public boolean equals(String id) {
-
-        return this.id.equals(id);
     }
 
     @Override
     public String toString() {
         return
                 "Client name: " + name +
-                "\nAddress: " + address +
-                "\nShow: " + show +
-                "Id: " + id  +
-                "\nBalance: " + balance +
-                "\nPhoneNumber: " + phoneNumber+"\n";
+                        "\nAddress: " + address +
+                        "\nShow: " + show +
+                        "Id: " + id +
+                        "\nBalance: " + balance +
+                        "\nPhoneNumber: " + phoneNumber + "\n";
     }
 
     @Override

@@ -6,6 +6,11 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Random;
 
+/**
+ * Author Fromssa Olana
+ * TicketBarCodeServer class will serve generating a unique barcode for the ticket objects.
+ */
+
 public class TicketBarCodeServer implements Serializable {
     private static final long serialVersionUID = 1L;
     private  int barCode;
@@ -51,7 +56,7 @@ public class TicketBarCodeServer implements Serializable {
      *
      * @param input inputstream for deserialization
      */
-    public static void retrieve(ObjectInputStream input) {
+    static void retrieve(ObjectInputStream input) {
         try {
             server = (TicketBarCodeServer) input.readObject();
         } catch(IOException ioe) {

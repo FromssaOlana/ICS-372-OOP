@@ -2,7 +2,11 @@ package com.TheaterApp;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.List;
+
+/**
+ * Author Fromssa Olana
+ * A show class will represent a show and will hold all attributes.
+ */
 
 public class Show implements Matchable<String>, Comparable, Serializable {
     private static final long serialVersionUID = 1L;
@@ -10,33 +14,30 @@ public class Show implements Matchable<String>, Comparable, Serializable {
     private ShowTime showTime;
     private Client client;
     private double ticketPrice;
-    private List bookedCostumersList = new LinkedList<Customer>();
 
-    public Show(String showName, ShowTime showTime, Client client, double ticketPrice) {
+
+    Show(String showName, ShowTime showTime, Client client, double ticketPrice) {
         this.showName = showName;
         this.showTime = showTime;
         this.client = client;
         this.ticketPrice = ticketPrice;
     }
 
-    public String getShowName() {
-
-        return showName;
-    }
-
-    public double getTicketPrice() {
+    double getTicketPrice() {
         return ticketPrice;
     }
-    public Client getClient(){
+
+    public Client getClient() {
 
         return this.client;
     }
-    public Calendar getShowStartDate() {
+
+    Calendar getShowStartDate() {
 
         return showTime.getStartDate();
     }
 
-    public Calendar getShowEndDate(){
+    Calendar getShowEndDate() {
 
         return showTime.getEndDate();
     }
@@ -45,16 +46,10 @@ public class Show implements Matchable<String>, Comparable, Serializable {
         this.client = client;
     }
 
-    public boolean removeCustomer(Customer customer) {
-        if (bookedCostumersList.remove(customer)) {
-            return true;
-        }
-        return false;
-    }
 
-    @Override // to string needs to be fixed
+    @Override
     public String toString() {
-       return "Show Name: "+showName + "\nShow host: " + client.getName() + "\n"+
+        return "Show Name: " + showName + "\nShow host: " + client.getName() + "\n" +
                 this.showTime.toString();
     }
 
@@ -66,7 +61,7 @@ public class Show implements Matchable<String>, Comparable, Serializable {
 
     @Override
     public int compareTo(Object other) {
-        Show show = (Show)other;
+        Show show = (Show) other;
         return this.showTime.compareTo(show.showTime);
     }
 }

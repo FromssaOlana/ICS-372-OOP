@@ -1,5 +1,10 @@
 package com.TheaterApp;
 
+/**
+ * Author Fromssa Olana
+ * A student ticket class will represent a student type ticket.
+ */
+
 public class StudentTicket extends Ticket {
     private static final long serialVersionUID = 1L;
 

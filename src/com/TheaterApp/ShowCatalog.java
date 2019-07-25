@@ -8,6 +8,11 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * Author Fromssa Olana
+ * ShowCatalog class is a collection class that will hold objects of shows.
+ */
+
 public class ShowCatalog extends ItemList<Show, String> implements Serializable {
     private static final long serialVersionUID = 1L;
     private static ShowCatalog showCatalog;
@@ -48,7 +53,7 @@ public class ShowCatalog extends ItemList<Show, String> implements Serializable 
      * @param show the client to be inserted
      * @return true iff the client could be inserted. Currently always true
      */
-    public boolean addShow(Show show) {
+    boolean addShow(Show show) {
         if (isDateAvailable(show)) {
             return super.add(show);
         }
@@ -58,15 +63,16 @@ public class ShowCatalog extends ItemList<Show, String> implements Serializable 
 
     /**
      * Checks if the requested date ia available to add the show
+     *
      * @param show
      * @return
      */
     private boolean isDateAvailable(Show show) {
-       List<Show> list = super.getList();
-       Show[] array = list.toArray( new Show[list.size()]);
-       if (list.size() == 0){
-           return true;
-       }
+        List<Show> list = super.getList();
+        Show[] array = list.toArray(new Show[list.size()]);
+        if (list.size() == 0) {
+            return true;
+        }
         if ((show.getShowEndDate().before(array[0].getShowStartDate()) ||
                 (show.getShowStartDate().after(array[array.length - 1].getShowEndDate())))) {
             return true;
@@ -79,13 +85,14 @@ public class ShowCatalog extends ItemList<Show, String> implements Serializable 
         }
         return false;
     }
-    public Show search(Calendar showDate){
+
+    Show search(Calendar showDate) {
         List<Show> list = super.getList();
-        for (Iterator<Show> iterator = list.iterator(); iterator.hasNext();){
+        for (Iterator<Show> iterator = list.iterator(); iterator.hasNext(); ) {
             Show show = iterator.next();
             if (showDate.after(show.getShowStartDate()) &&
-                    showDate.before(show.getShowEndDate())){
-                    return show;
+                    showDate.before(show.getShowEndDate())) {
+                return show;
             }
         }
         return null;
