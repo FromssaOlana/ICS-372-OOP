@@ -1,4 +1,4 @@
-package com.TheaterApp;
+package TheaterApplication;
 
 import java.io.Serializable;
 import java.util.*;

@@ -1,4 +1,4 @@
-package com.TheaterApp;
+package TheaterApplication;
 
 /**
  *Author Fromssa Olana

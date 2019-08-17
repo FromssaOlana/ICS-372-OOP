@@ -1,4 +1,4 @@
-package com.TheaterApp;
+package TheaterApplication;
 
 import java.util.Iterator;
 import java.io.Serializable;

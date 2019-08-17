@@ -1,4 +1,4 @@
-package com.TheaterApp;
+package TheaterApplication;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -7,62 +7,67 @@ import java.io.Serializable;
 
 /**
  * Author Fromssa Olana
- * Customer Id Server class will generate an ID for a customer object.
+ * A client Id Server class will generate an id for each call to a client class.
  */
 
-public class CustomerIdServer  implements Serializable {
+public class ClientIdServer implements Serializable {
     private static final long serialVersionUID = 1L;
-    private  int idCounter;
-    private static CustomerIdServer server;
+    private int idCounter;
+    private static ClientIdServer server;
+
     /*
      * Private constructor for singleton pattern
      *
      */
-    private CustomerIdServer() {
-
+    private ClientIdServer() {
         idCounter = 1;
     }
+
     /**
      * Supports the singleton pattern
      *
      * @return the singleton object
      */
-    public static CustomerIdServer instance() {
+    public static ClientIdServer instance() {
         if (server == null) {
-            return (server = new CustomerIdServer());
+            return (server = new ClientIdServer());
         } else {
             return server;
         }
     }
+
     /**
      * Getter for id
+     *
      * @return id of the client
      */
     public int getId() {
         return idCounter++;
     }
+
     /**
      * String form of the collection
-     *
      */
     @Override
     public String toString() {
         return ("IdServer" + idCounter);
     }
+
     /**
      * Retrieves the server object
      *
      * @param input inputstream for deserialization
      */
-    public static void retrieve(ObjectInputStream input) {
+    static void retrieve(ObjectInputStream input) {
         try {
-            server = (CustomerIdServer) input.readObject();
-        } catch(IOException ioe) {
+            server = (ClientIdServer) input.readObject();
+        } catch (IOException ioe) {
             ioe.printStackTrace();
-        } catch(Exception cnfe) {
+        } catch (Exception cnfe) {
             cnfe.printStackTrace();
         }
     }
+
     /*
      * Supports serialization
      * @param output the stream to be written to
@@ -71,10 +76,11 @@ public class CustomerIdServer  implements Serializable {
         try {
             output.defaultWriteObject();
             output.writeObject(server);
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             ioe.printStackTrace();
         }
     }
+
     /*
      * Supports serialization
      * @param input the stream to be read from
@@ -83,11 +89,11 @@ public class CustomerIdServer  implements Serializable {
         try {
             input.defaultReadObject();
             if (server == null) {
-                server = (CustomerIdServer) input.readObject();
+                server = (ClientIdServer) input.readObject();
             } else {
                 input.readObject();
             }
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             ioe.printStackTrace();
         }
     }

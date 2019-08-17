@@ -1,58 +1,56 @@
-package com.TheaterApp;
+package TheaterApplication;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Random;
 
 /**
  * Author Fromssa Olana
- * A client Id Server class will generate an id for each call to a client class.
+ * TicketBarCodeServer class will serve generating a unique barcode for the ticket objects.
  */
 
-public class ClientIdServer implements Serializable {
+public class TicketBarCodeServer implements Serializable {
     private static final long serialVersionUID = 1L;
-    private int idCounter;
-    private static ClientIdServer server;
-
+    private  int barCode;
+    private static TicketBarCodeServer server;
     /*
      * Private constructor for singleton pattern
      *
      */
-    private ClientIdServer() {
-        idCounter = 1;
-    }
+    private TicketBarCodeServer() {
+        Random random = new Random();
+        barCode  = random.nextInt(1000000000);
 
+    }
     /**
      * Supports the singleton pattern
      *
      * @return the singleton object
      */
-    public static ClientIdServer instance() {
+    public static TicketBarCodeServer instance() {
         if (server == null) {
-            return (server = new ClientIdServer());
+            return (server = new TicketBarCodeServer());
         } else {
             return server;
         }
     }
-
     /**
-     * Getter for id
-     *
-     * @return id of the client
+     * Getter for Barcode
+     * @return barcode of the client
      */
-    public int getId() {
-        return idCounter++;
+    public int getBarCode() {
+        return barCode;
     }
-
     /**
      * String form of the collection
+     *
      */
     @Override
     public String toString() {
-        return ("IdServer" + idCounter);
+        return ("Barcode:" + barCode);
     }
-
     /**
      * Retrieves the server object
      *
@@ -60,14 +58,13 @@ public class ClientIdServer implements Serializable {
      */
     static void retrieve(ObjectInputStream input) {
         try {
-            server = (ClientIdServer) input.readObject();
-        } catch (IOException ioe) {
+            server = (TicketBarCodeServer) input.readObject();
+        } catch(IOException ioe) {
             ioe.printStackTrace();
-        } catch (Exception cnfe) {
+        } catch(Exception cnfe) {
             cnfe.printStackTrace();
         }
     }
-
     /*
      * Supports serialization
      * @param output the stream to be written to
@@ -76,11 +73,10 @@ public class ClientIdServer implements Serializable {
         try {
             output.defaultWriteObject();
             output.writeObject(server);
-        } catch (IOException ioe) {
+        } catch(IOException ioe) {
             ioe.printStackTrace();
         }
     }
-
     /*
      * Supports serialization
      * @param input the stream to be read from
@@ -89,11 +85,11 @@ public class ClientIdServer implements Serializable {
         try {
             input.defaultReadObject();
             if (server == null) {
-                server = (ClientIdServer) input.readObject();
+                server = (TicketBarCodeServer) input.readObject();
             } else {
                 input.readObject();
             }
-        } catch (IOException ioe) {
+        } catch(IOException ioe) {
             ioe.printStackTrace();
         }
     }
